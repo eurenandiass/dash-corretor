@@ -28,7 +28,6 @@
     </script>
 
     <style>
-        /* Animações Premium */
         .page-content { display: none; }
         .page-active { display: block; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         
@@ -39,12 +38,10 @@
 
         .nav-link.active { background: #D4AF37; color: #000; font-weight: 700; transform: translateX(5px); }
         
-        /* Glassmorphism e Refinos */
         .glass { background: rgba(20, 20, 22, 0.7); backdrop-filter: blur(12px); }
         input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; transition: all 0.3s ease; }
         input:focus { border-color: #D4AF37 !important; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1); outline: none; }
         
-        /* Shimmer effect para o simulador */
         .shimmer { position: relative; overflow: hidden; }
         .shimmer::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -57,17 +54,17 @@
 <body class="bg-brand-dark text-gray-200 font-sans antialiased overflow-x-hidden">
 
     <div id="login-overlay" class="fixed inset-0 z-[100] bg-brand-dark flex items-center justify-center px-4 transition-opacity duration-500">
-        <div class="max-w-md w-full bg-brand-card p-10 rounded-[2rem] border border-brand-border shadow-2xl">
-            <div class="text-center mb-10">
+        <div class="max-w-md w-full bg-brand-card p-10 rounded-[2rem] border border-brand-border shadow-2xl text-center">
+            <div class="mb-10">
                 <div class="inline-block p-4 bg-brand-gold/10 rounded-2xl mb-4">
                     <i class="fas fa-shield-halved text-brand-gold text-4xl"></i>
                 </div>
                 <h2 class="text-3xl font-black tracking-tighter text-white">NEXUS <span class="text-brand-gold">PRO</span></h2>
-                <p class="text-gray-500 text-sm mt-2 uppercase tracking-[0.2em] font-medium">Enterprise Management</p>
+                <p class="text-gray-500 text-sm mt-2 uppercase tracking-[0.2em] font-medium">Gestão Corporativa</p>
             </div>
             <div class="space-y-5">
-                <input type="text" id="user-input" placeholder="Credential ID" class="w-full p-4 rounded-xl text-sm">
-                <input type="password" id="pass-input" placeholder="Security Token" class="w-full p-4 rounded-xl text-sm">
+                <input type="text" id="user-input" placeholder="Usuário / Credencial" class="w-full p-4 rounded-xl text-sm">
+                <input type="password" id="pass-input" placeholder="Senha de Acesso" class="w-full p-4 rounded-xl text-sm">
                 <button onclick="handleLogin(this)" class="w-full py-4 bg-brand-gold text-black font-black rounded-xl uppercase text-xs tracking-widest hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                     Autenticar Acesso
                 </button>
@@ -79,18 +76,18 @@
         
         <aside class="w-full md:w-72 bg-brand-card border-r border-brand-border flex flex-col h-screen sticky top-0 hidden md:flex z-50">
             <div class="p-8">
-                <h1 class="text-2xl font-black tracking-tighter text-white">NEXUS <span class="text-brand-gold text-sm font-light">SYSTEM</span></h1>
+                <h1 class="text-2xl font-black tracking-tighter text-white">NEXUS <span class="text-brand-gold text-sm font-light">SISTEMA</span></h1>
             </div>
             
             <nav class="px-4 space-y-2 flex-grow">
                 <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all active" id="btn-resumo">
-                    <i class="fas fa-chart-pie"></i> Dashboard
+                    <i class="fas fa-chart-pie"></i> Painel Geral
                 </button>
                 <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-leads">
                     <i class="fas fa-user-group"></i> Leads & CRM
                 </button>
                 <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-simulador">
-                    <i class="fas fa-calculator"></i> Simulador Bank-Pro
+                    <i class="fas fa-calculator"></i> Simulador Bancário
                 </button>
             </nav>
 
@@ -98,7 +95,7 @@
                 <div class="bg-black/40 p-4 rounded-2xl border border-brand-border flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-gold to-yellow-600 flex items-center justify-center text-black font-black shadow-lg">R</div>
                     <div>
-                        <p class="text-[10px] font-black text-white uppercase leading-none">Corretor Senior</p>
+                        <p class="text-[10px] font-black text-white uppercase leading-none">Corretor Sênior</p>
                         <p class="text-[9px] text-brand-gold mt-1">CRECI 97.201</p>
                     </div>
                 </div>
@@ -107,7 +104,7 @@
 
         <main class="flex-grow flex flex-col min-h-screen">
             <div class="md:hidden p-5 bg-brand-card border-b border-brand-border flex justify-between items-center glass sticky top-0 z-[60]">
-                <span class="font-black text-brand-gold tracking-tighter">NEXUS PRO</span>
+                <span class="font-black text-brand-gold tracking-tighter text-xl">NEXUS PRO</span>
                 <button class="p-2"><i class="fas fa-bars text-brand-gold"></i></button>
             </div>
 
@@ -116,53 +113,48 @@
                 <div id="page-resumo" class="page-content page-active space-y-12">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                         <div>
-                            <h2 class="text-4xl font-black text-white tracking-tighter">Executive <span class="text-brand-gold">Summary</span></h2>
-                            <p class="text-gray-500 font-medium">Consolidado de performance do mercado imobiliário RJ.</p>
+                            <h2 class="text-4xl font-black text-white tracking-tighter">Resumo <span class="text-brand-gold">Executivo</span></h2>
+                            <p class="text-gray-500 font-medium">Consolidado de métricas e performance RJ.</p>
                         </div>
                         <div class="bg-brand-card px-4 py-2 rounded-lg border border-brand-border flex items-center gap-3">
                             <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Live Analytics</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Dados em Tempo Real</span>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-brand-gold/30 transition-all duration-300 group">
-                            <div class="w-10 h-10 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <i class="fas fa-rocket text-brand-gold"></i>
+                            <div class="w-10 h-10 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6">
+                                <i class="fas fa-arrow-trend-up text-brand-gold"></i>
                             </div>
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">VGV Negociado</p>
                             <h3 class="text-3xl font-black text-white mt-1">R$ 4.2M</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-blue-400/30 transition-all duration-300 group text-blue-400">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-blue-400/30 transition-all duration-300 group">
                             <div class="w-10 h-10 bg-blue-400/10 rounded-xl flex items-center justify-center mb-6">
-                                <i class="fas fa-fingerprint"></i>
+                                <i class="fas fa-users text-blue-400"></i>
                             </div>
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Leads Ativos</p>
                             <h3 class="text-3xl font-black text-white mt-1">128</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-green-400/30 transition-all duration-300 group text-green-400">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-green-400/30 transition-all duration-300 group">
                             <div class="w-10 h-10 bg-green-400/10 rounded-xl flex items-center justify-center mb-6">
-                                <i class="fas fa-calendar-check"></i>
+                                <i class="fas fa-check-double text-green-400"></i>
                             </div>
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Reservas</p>
                             <h3 class="text-3xl font-black text-white mt-1">07</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border border-brand-gold/20 bg-gradient-to-br from-brand-card to-brand-gold/5">
-                            <div class="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center mb-6 text-black">
-                                <i class="fas fa-vault"></i>
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border bg-gradient-to-br from-brand-card to-brand-gold/5">
+                            <div class="w-10 h-10 bg-brand-gold rounded-xl flex items-center justify-center mb-6 text-black font-bold">
+                                <i class="fas fa-hand-holding-dollar"></i>
                             </div>
                             <p class="text-brand-gold text-[10px] uppercase font-black tracking-widest">Comissões</p>
                             <h3 class="text-3xl font-black text-white mt-1">R$ 168k</h3>
                         </div>
                     </div>
 
-                    <div class="bg-brand-card p-8 rounded-[2.5rem] border border-brand-border shadow-inner">
-                        <div class="flex items-center justify-between mb-10">
-                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Traffic Analysis & Flow</h4>
-                            <div class="flex gap-2">
-                                <span class="px-3 py-1 bg-brand-gold text-black text-[9px] font-black rounded-md">YTD</span>
-                            </div>
-                        </div>
+                    <div class="bg-brand-card p-8 rounded-[2.5rem] border border-brand-border">
+                        <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-8">Fluxo de Captação e Tráfego</h4>
                         <canvas id="performanceChart" height="100"></canvas>
                     </div>
                 </div>
@@ -170,97 +162,93 @@
                 <div id="page-leads" class="page-content space-y-8">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-3xl font-black text-white tracking-tight">Leads <span class="text-brand-gold">Intelligence</span></h2>
-                            <p class="text-gray-500 text-sm">Controle de pipeline e prospecção ativa.</p>
+                            <h2 class="text-3xl font-black text-white tracking-tight">Gestão de <span class="text-brand-gold">Oportunidades</span></h2>
+                            <p class="text-gray-500 text-sm">Pipeline de vendas e controle de interessados.</p>
                         </div>
-                        <button onclick="toggleModal()" class="bg-brand-gold text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-gold/20">
-                            + New Opportunity
+                        <button onclick="toggleModal()" class="bg-brand-gold text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-brand-gold/20">
+                            + Nova Oportunidade
                         </button>
                     </div>
 
-                    <div class="bg-brand-card rounded-[2rem] border border-brand-border overflow-hidden shadow-2xl">
+                    <div class="bg-brand-card rounded-[2rem] border border-brand-border overflow-hidden">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead class="bg-black/50 text-[9px] uppercase tracking-[0.3em] text-gray-500">
                                     <tr>
                                         <th class="p-7">Investidor</th>
-                                        <th class="p-7">Asset Interest</th>
-                                        <th class="p-7">Pipeline Status</th>
-                                        <th class="p-7">Commands</th>
+                                        <th class="p-7">Interesse</th>
+                                        <th class="p-7">Status Funil</th>
+                                        <th class="p-7">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm">
-                                    </tbody>
+                                <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
                 <div id="page-simulador" class="page-content">
                     <div class="max-w-5xl mx-auto">
-                        <div class="mb-10 text-center md:text-left">
-                            <h2 class="text-4xl font-black text-white tracking-tighter">Bank-Pro <span class="text-brand-gold">Simulator</span></h2>
-                            <p class="text-gray-500 font-medium">Cálculos complexos de amortização (SAC/PRICE) com taxas equivalentes.</p>
+                        <div class="mb-10">
+                            <h2 class="text-4xl font-black text-white tracking-tighter">Simulador <span class="text-brand-gold">Bancário Pro</span></h2>
+                            <p class="text-gray-500 font-medium">Análise de amortização SAC e PRICE com taxas reais.</p>
                         </div>
 
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                             <div class="lg:col-span-4 bg-brand-card p-8 rounded-[2.5rem] border border-brand-border space-y-6 shimmer">
                                 <div>
-                                    <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Asset Value (R$)</label>
+                                    <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Valor do Imóvel (R$)</label>
                                     <input type="number" id="vImovel" class="w-full p-4 rounded-2xl font-bold text-lg" value="500000">
                                 </div>
                                 <div>
-                                    <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Down Payment (Entrada)</label>
-                                    <input type="number" id="vEntrada" class="w-full p-4 rounded-2xl font-bold text-lg text-brand-gold" value="100000">
+                                    <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest text-brand-gold">Entrada (R$)</label>
+                                    <input type="number" id="vEntrada" class="w-full p-4 rounded-2xl font-bold text-lg" value="100000">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Term (Months)</label>
+                                        <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Prazo (Meses)</label>
                                         <input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360">
                                     </div>
                                     <div>
-                                        <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Rates (% a.a.)</label>
+                                        <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Taxa (% a.a.)</label>
                                         <input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5" step="0.1">
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="text-[9px] text-brand-gold uppercase font-black mb-3 block tracking-widest">Amortization Method</label>
+                                    <label class="text-[9px] text-gray-500 uppercase font-black mb-3 block tracking-widest">Sistema de Amortização</label>
                                     <select id="vSistema" class="w-full p-4 rounded-2xl font-black text-xs uppercase tracking-widest">
                                         <option value="SAC">SAC (Decrescente)</option>
-                                        <option value="PRICE">PRICE (Prestações Fixas)</option>
+                                        <option value="PRICE">PRICE (Fixa)</option>
                                     </select>
                                 </div>
-                                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-[0.2em] shadow-2xl shadow-brand-gold/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-[0.2em] shadow-2xl hover:scale-[1.02] transition-all">
                                     Analisar Viabilidade
                                 </button>
                             </div>
 
                             <div id="res-calculo" class="lg:col-span-8 space-y-6 hidden">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                    <div class="bg-brand-card p-8 rounded-[2rem] border border-brand-border bg-gradient-to-br from-brand-card to-white/[0.02]">
-                                        <p class="text-gray-500 text-[9px] uppercase font-black tracking-widest mb-2">Initial Installment</p>
+                                    <div class="bg-brand-card p-8 rounded-[2rem] border border-brand-border">
+                                        <p class="text-gray-500 text-[9px] uppercase font-black tracking-widest mb-2">Primeira Parcela</p>
                                         <h3 id="res-primeira" class="text-4xl font-black text-white tracking-tighter">R$ 0,00</h3>
                                     </div>
                                     <div class="bg-brand-card p-8 rounded-[2rem] border border-brand-border">
-                                        <p class="text-gray-500 text-[9px] uppercase font-black tracking-widest mb-2">Last Installment</p>
+                                        <p class="text-gray-500 text-[9px] uppercase font-black tracking-widest mb-2">Última Parcela</p>
                                         <h3 id="res-ultima" class="text-4xl font-black text-gray-500 tracking-tighter">R$ 0,00</h3>
                                     </div>
                                 </div>
-
                                 <div class="bg-brand-card p-10 rounded-[2.5rem] border border-brand-border">
                                     <div class="flex flex-col md:flex-row items-center gap-12">
-                                        <div class="w-full md:w-1/2">
-                                            <canvas id="loanChart"></canvas>
-                                        </div>
+                                        <div class="w-full md:w-1/2"><canvas id="loanChart"></canvas></div>
                                         <div class="w-full md:w-1/2 space-y-6">
                                             <div>
-                                                <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Accumulated Interest (Total)</p>
-                                                <h4 id="res-juros-total" class="text-2xl font-bold text-red-500 tracking-tight">R$ 0,00</h4>
+                                                <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Total em Juros</p>
+                                                <h4 id="res-juros-total" class="text-2xl font-bold text-red-500">R$ 0,00</h4>
                                             </div>
                                             <div class="h-px bg-brand-border"></div>
                                             <div>
-                                                <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest text-brand-gold">Total Effective Cost (CET)</p>
+                                                <p class="text-brand-gold text-[10px] uppercase font-black tracking-widest">Custo Total (CET)</p>
                                                 <h4 id="res-cet" class="text-3xl font-black text-white tracking-tighter">R$ 0,00</h4>
-                                                <p class="text-[9px] text-gray-600 mt-2 italic font-medium">Engenharia financeira baseada em juros compostos mensais.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -269,45 +257,38 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
 
     <div id="modal-lead" class="fixed inset-0 z-[110] bg-black/95 hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-brand-card w-full max-w-lg rounded-[2.5rem] border border-brand-border p-10 shadow-2xl">
-            <h3 class="text-2xl font-black mb-8 text-white tracking-tight">New <span class="text-brand-gold">Opportunity</span></h3>
+            <h3 class="text-2xl font-black mb-8 text-white tracking-tight">Nova <span class="text-brand-gold">Oportunidade</span></h3>
             <div class="space-y-5">
-                <input type="text" id="lead-nome" placeholder="Full Name" class="w-full p-5 rounded-2xl">
+                <input type="text" id="lead-nome" placeholder="Nome do Cliente" class="w-full p-5 rounded-2xl">
                 <select id="lead-interesse" class="w-full p-5 rounded-2xl font-bold">
                     <option value="Riva Barra Residencial">Riva Barra Residencial</option>
                     <option value="Riva Recreio Luxury">Riva Recreio Luxury</option>
                     <option value="Centro Excellence">Centro Excellence</option>
                 </select>
                 <div class="flex gap-4 pt-6">
-                    <button onclick="toggleModal()" class="flex-1 py-5 bg-brand-border rounded-2xl font-black text-[10px] uppercase tracking-widest">Cancel</button>
-                    <button onclick="salvarLead()" class="flex-1 py-5 bg-brand-gold text-black rounded-2xl font-black text-[10px] uppercase tracking-widest">Register Lead</button>
+                    <button onclick="toggleModal()" class="flex-1 py-5 bg-brand-border rounded-2xl font-black text-[10px] uppercase tracking-widest">Cancelar</button>
+                    <button onclick="salvarLead()" class="flex-1 py-5 bg-brand-gold text-black rounded-2xl font-black text-[10px] uppercase tracking-widest">Cadastrar Lead</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES E ESTADO
         let leads = JSON.parse(localStorage.getItem('leads')) || [
             { id: 1, nome: "Marcus Vinicius", interesse: "Riva Barra", status: "VIP" },
-            { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Hot" }
+            { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Quente" }
         ];
         let loanChart = null;
 
-        // MOTOR DE LOGIN COM UPGRADE DE ELITE
         function handleLogin(btn) {
-            const user = document.getElementById('user-input').value;
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Autenticando...';
             btn.disabled = true;
-
             setTimeout(() => {
                 document.getElementById('login-overlay').classList.add('opacity-0');
                 setTimeout(() => {
@@ -315,73 +296,33 @@
                     document.getElementById('app').classList.remove('hidden');
                     renderLeads();
                     initChart();
-                    
-                    Swal.fire({
-                        title: 'Acesso Autorizado',
-                        text: 'Bem-vindo ao Nexus Intelligence Portal',
-                        icon: 'success',
-                        background: '#141416',
-                        color: '#fff',
-                        confirmButtonColor: '#D4AF37'
-                    });
+                    Swal.fire({ title: 'Acesso Autorizado', text: 'Bem-vindo ao Portal Nexus Pro', icon: 'success', background: '#141416', color: '#fff', confirmButtonColor: '#D4AF37' });
                 }, 500);
-            }, 1500);
+            }, 1200);
         }
 
-        // NAVEGAÇÃO SPA
         function navigate(page) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
             document.getElementById('page-' + page).classList.add('page-active');
-            
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('active', 'text-black');
-                l.classList.add('text-gray-500');
-            });
+            document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('active'); l.classList.add('text-gray-500'); });
             document.getElementById('btn-' + page).classList.add('active');
-            document.getElementById('btn-' + page).classList.remove('text-gray-500');
         }
 
-        // CRM LOGIC (CRUD)
-        function toggleModal() {
-            const m = document.getElementById('modal-lead');
-            m.classList.toggle('hidden');
-            m.classList.toggle('flex');
-        }
+        function toggleModal() { const m = document.getElementById('modal-lead'); m.classList.toggle('hidden'); m.classList.toggle('flex'); }
 
         function salvarLead() {
             const nome = document.getElementById('lead-nome').value;
             const interesse = document.getElementById('lead-interesse').value;
-            
-            if(!nome) return Swal.fire({ icon: 'error', title: 'Erro', text: 'Nome é obrigatório!', background: '#141416', color: '#fff' });
-
-            const novoLead = { id: Date.now(), nome, interesse, status: "New" };
-            leads.push(novoLead);
+            if(!nome) return Swal.fire({ icon: 'error', title: 'Erro', text: 'Nome obrigatório!', background: '#141416', color: '#fff' });
+            leads.push({ id: Date.now(), nome, interesse, status: "Novo" });
             localStorage.setItem('leads', JSON.stringify(leads));
-            renderLeads();
-            toggleModal();
-            document.getElementById('lead-nome').value = "";
-
-            Swal.fire({
-                toast: true, position: 'top-end', icon: 'success', title: 'Lead registrado',
-                showConfirmButton: false, timer: 2000, background: '#141416', color: '#D4AF37'
-            });
+            renderLeads(); toggleModal(); document.getElementById('lead-nome').value = "";
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Lead Cadastrado', showConfirmButton: false, timer: 2000, background: '#141416', color: '#D4AF37' });
         }
 
         function deletarLead(id) {
-            Swal.fire({
-                title: 'Remover Lead?',
-                text: "Esta ação não pode ser revertida!",
-                icon: 'warning',
-                showCancelButton: true,
-                background: '#141416', color: '#fff',
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Sim, deletar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    leads = leads.filter(l => l.id !== id);
-                    localStorage.setItem('leads', JSON.stringify(leads));
-                    renderLeads();
-                }
+            Swal.fire({ title: 'Excluir Lead?', icon: 'warning', showCancelButton: true, background: '#141416', color: '#fff', confirmButtonColor: '#ef4444', confirmButtonText: 'Sim, excluir' }).then((result) => {
+                if (result.isConfirmed) { leads = leads.filter(l => l.id !== id); localStorage.setItem('leads', JSON.stringify(leads)); renderLeads(); }
             });
         }
 
@@ -391,49 +332,31 @@
                 <tr class="hover:bg-white/[0.02] transition-all group">
                     <td class="p-7 font-bold text-white">${l.nome}</td>
                     <td class="p-7 text-gray-500 font-medium">${l.interesse}</td>
-                    <td class="p-7">
-                        <span class="px-4 py-1.5 bg-brand-gold/10 text-brand-gold text-[9px] font-black uppercase rounded-full border border-brand-gold/10">${l.status}</span>
-                    </td>
-                    <td class="p-7">
-                        <button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500 transition-colors p-2"><i class="fas fa-trash-can"></i></button>
-                    </td>
+                    <td class="p-7"><span class="px-4 py-1.5 bg-brand-gold/10 text-brand-gold text-[9px] font-black uppercase rounded-full border border-brand-gold/10">${l.status}</span></td>
+                    <td class="p-7"><button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500 p-2"><i class="fas fa-trash-can"></i></button></td>
                 </tr>
             `).join('');
         }
 
-        // MOTOR FINANCEIRO BANK-PRO (SAC / PRICE)
         function processarCalculoPro() {
             const vImovel = parseFloat(document.getElementById('vImovel').value);
             const vEntrada = parseFloat(document.getElementById('vEntrada').value);
             const n = parseInt(document.getElementById('vPrazo').value);
             const iAnual = parseFloat(document.getElementById('vTaxa').value) / 100;
             const sistema = document.getElementById('vSistema').value;
+            const saldo = vImovel - vEntrada;
+            const iMensal = Math.pow(1 + iAnual, 1/12) - 1;
+            let primeira, ultima, totalPago, juros;
 
-            const saldoDevedor = vImovel - vEntrada;
-            const iMensal = Math.pow(1 + iAnual, 1/12) - 1; // Equivalência Juros Compostos
-
-            let primeira, ultima, totalPago, jurosTotal;
-
-            if (sistema === "PRICE") {
-                primeira = (saldoDevedor * iMensal) / (1 - Math.pow(1 + iMensal, -n));
-                ultima = primeira;
-                totalPago = primeira * n;
-                jurosTotal = totalPago - saldoDevedor;
-            } else {
-                const amortizacao = saldoDevedor / n;
-                primeira = amortizacao + (saldoDevedor * iMensal);
-                ultima = amortizacao + (amortizacao * iMensal);
-                jurosTotal = ((saldoDevedor * iMensal) + (amortizacao * iMensal)) * n / 2;
-                totalPago = saldoDevedor + jurosTotal;
-            }
+            if (sistema === "PRICE") { primeira = (saldo * iMensal) / (1 - Math.pow(1 + iMensal, -n)); ultima = primeira; totalPago = primeira * n; juros = totalPago - saldo;
+            } else { const amort = saldo / n; primeira = amort + (saldo * iMensal); ultima = amort + (amort * iMensal); juros = ((saldo * iMensal) + (amort * iMensal)) * n / 2; totalPago = saldo + juros; }
 
             document.getElementById('res-calculo').classList.remove('hidden');
             document.getElementById('res-primeira').innerText = formatBRL(primeira);
             document.getElementById('res-ultima').innerText = formatBRL(ultima);
-            document.getElementById('res-juros-total').innerText = formatBRL(jurosTotal);
+            document.getElementById('res-juros-total').innerText = formatBRL(juros);
             document.getElementById('res-cet').innerText = formatBRL(totalPago);
-
-            updateLoanChart(saldoDevedor, jurosTotal);
+            updateLoanChart(saldo, juros);
         }
 
         function formatBRL(v) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
@@ -441,37 +364,12 @@
         function updateLoanChart(p, j) {
             const ctx = document.getElementById('loanChart').getContext('2d');
             if(loanChart) loanChart.destroy();
-            loanChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Capital', 'Juros'],
-                    datasets: [{ data: [p, j], backgroundColor: ['#D4AF37', '#232326'], borderWidth: 0 }]
-                },
-                options: { cutout: '80%', plugins: { legend: { display: false } } }
-            });
+            loanChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Capital', 'Juros'], datasets: [{ data: [p, j], backgroundColor: ['#D4AF37', '#232326'], borderWidth: 0 }] }, options: { cutout: '80%', plugins: { legend: { display: false } } } });
         }
 
         function initChart() {
             const ctx = document.getElementById('performanceChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                    datasets: [{
-                        label: 'Volume de Leads',
-                        data: [45, 98, 70, 125, 110, 157],
-                        borderColor: '#D4AF37',
-                        borderWidth: 4,
-                        tension: 0.4,
-                        fill: true,
-                        backgroundColor: 'rgba(212, 175, 55, 0.05)'
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: { y: { grid: { color: '#1A1A1C' }, ticks: { color: '#444' } }, x: { grid: { display: false }, ticks: { color: '#444' } } }
-                }
-            });
+            new Chart(ctx, { type: 'line', data: { labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], datasets: [{ label: 'Leads', data: [45, 98, 70, 125, 110, 157], borderColor: '#D4AF37', borderWidth: 4, tension: 0.4, fill: true, backgroundColor: 'rgba(212, 175, 55, 0.05)' }] }, options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1A1A1C' }, ticks: { color: '#444' } }, x: { grid: { display: false }, ticks: { color: '#444' } } } } });
         }
     </script>
 </body>
