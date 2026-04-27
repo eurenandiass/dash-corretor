@@ -22,8 +22,10 @@
         }
     </script>
     <style>
-        .glass { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(10px); }
-        input:focus { outline: none; border-color: #D4AF37 !important; }
+        .active-link { color: #D4AF37; background: rgba(212, 175, 55, 0.1); border-right: 3px solid #D4AF37; }
+        .page-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .page-active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-dark-obsidian text-white font-sans antialiased">
@@ -32,144 +34,172 @@
         <div class="max-w-md w-full bg-dark-card p-10 rounded-2xl border border-white/5 shadow-2xl">
             <div class="text-center mb-8">
                 <h2 class="text-gold-primary text-2xl font-bold tracking-widest uppercase">Admin Portal</h2>
-                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Renan Dias | CRECI 97.201</p>
+                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Renan Dias | Sistema Interno</p>
             </div>
             <div class="space-y-4">
-                <input type="text" placeholder="Usuário" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm transition-all">
-                <input type="password" placeholder="Senha" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm transition-all">
+                <input type="text" id="user" placeholder="Usuário" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm focus:border-gold-primary outline-none transition-all">
+                <input type="password" id="pass" placeholder="Senha" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm focus:border-gold-primary outline-none transition-all">
                 <button onclick="login()" class="w-full py-4 bg-gold-primary text-black font-bold rounded-xl uppercase tracking-widest hover:bg-[#F1D592] transition-all">
-                    Acessar Dashboard
+                    Entrar no Sistema
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+    <div id="main-dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
         
-        <div class="w-full md:w-64 bg-dark-card border-r border-white/5 p-6 flex flex-col">
-            <h1 class="text-gold-primary font-bold tracking-tighter text-xl mb-10">RENAN DIAS</h1>
-            <nav class="space-y-2 flex-grow">
-                <a href="#" class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg text-gold-primary">
-                    <i class="fas fa-chart-line"></i> <span>Resumo</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-lg transition-all text-gray-400">
-                    <i class="fas fa-users"></i> <span>Meus Leads</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-lg transition-all text-gray-400">
-                    <i class="fas fa-calculator"></i> <span>Simulador Pro</span>
-                </a>
-            </nav>
-            <button onclick="location.reload()" class="mt-auto flex items-center space-x-3 p-3 text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
-                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
-            </button>
+        <div class="md:hidden flex items-center justify-between p-4 bg-dark-card border-b border-white/5">
+            <span class="text-gold-primary font-bold tracking-widest uppercase text-sm">Renan Dias</span>
+            <button onclick="toggleMenu()" class="text-gold-primary text-2xl"><i class="fas fa-bars"></i></button>
         </div>
 
-        <div class="flex-grow p-6 md:p-10 space-y-8 overflow-y-auto">
+        <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-dark-card border-r border-white/5 p-6 fixed md:relative z-50 h-full">
+            <div class="flex justify-between items-center mb-10">
+                <h1 class="text-gold-primary font-bold tracking-tighter text-xl">DASHBOARD</h1>
+                <button onclick="toggleMenu()" class="md:hidden text-white"><i class="fas fa-times"></i></button>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
-                    <p class="text-gray-500 text-xs uppercase tracking-widest">Leads Novos (Mês)</p>
-                    <h3 class="text-3xl font-bold mt-2">42</h3>
-                    <p class="text-green-500 text-[10px] mt-1 font-bold">+12% vs mês anterior</p>
-                </div>
-                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
-                    <p class="text-gray-500 text-xs uppercase tracking-widest">VGV em Aberto</p>
-                    <h3 class="text-3xl font-bold mt-2">R$ 1.2M</h3>
-                    <p class="text-gold-primary text-[10px] mt-1 font-bold">3 negociações ativas</p>
-                </div>
-                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
-                    <p class="text-gray-500 text-xs uppercase tracking-widest">Comissões Previstas</p>
-                    <h3 class="text-3xl font-bold mt-2 text-gold-primary">R$ 48.000</h3>
-                </div>
-            </div>
+            <nav class="space-y-2 flex-grow">
+                <button onclick="switchPage('resumo')" id="link-resumo" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all active-link">
+                    <i class="fas fa-chart-line"></i> <span>Resumo</span>
+                </button>
+                <button onclick="switchPage('leads')" id="link-leads" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all text-gray-400 hover:bg-white/5">
+                    <i class="fas fa-users"></i> <span>Meus Leads</span>
+                </button>
+                <button onclick="switchPage('simulador')" id="link-simulador" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all text-gray-400 hover:bg-white/5">
+                    <i class="fas fa-calculator"></i> <span>Simulador Pro</span>
+                </button>
+            </nav>
+            
+            <button onclick="location.reload()" class="mt-auto flex items-center space-x-3 p-4 text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
+                <i class="fas fa-sign-out-alt"></i> <span>Deslogar</span>
+            </button>
+        </aside>
 
-            <div class="bg-dark-card p-8 rounded-2xl border border-gold-primary/20 shadow-xl">
-                <h4 class="text-gold-primary font-bold uppercase tracking-widest mb-6">Simulador de Investimento Pro</h4>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-black">
-                    <div class="space-y-2">
-                        <label class="text-[10px] text-gray-400 uppercase">Valor do Imóvel (R$)</label>
-                        <input type="number" id="valorImovel" value="500000" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] text-gray-400 uppercase">Entrada (R$)</label>
-                        <input type="number" id="entrada" value="100000" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-[10px] text-gray-400 uppercase">Taxa de Juros (% a.a.)</label>
-                        <input type="number" id="taxa" value="10.5" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
-                    </div>
-                    <div class="space-y-2 flex items-end">
-                        <button onclick="calcularSimulacao()" class="w-full p-3 bg-gold-primary font-bold rounded-lg uppercase text-xs tracking-widest hover:scale-[1.02] transition-all">Calcular</button>
-                    </div>
-                </div>
-                <div id="resultado" class="p-6 bg-black rounded-xl border border-white/5 flex flex-col md:flex-row justify-around text-center">
-                    <div>
-                        <p class="text-[10px] text-gray-500 uppercase">Parcela Mensal Estimada</p>
-                        <h2 id="parcelaFinal" class="text-2xl font-bold text-gold-primary">R$ 0,00</h2>
-                    </div>
-                    <div>
-                        <p class="text-[10px] text-gray-500 uppercase">Saldo a Financiar</p>
-                        <h2 id="saldoFinanciar" class="text-2xl font-bold">R$ 0,00</h2>
-                    </div>
-                </div>
-            </div>
+        <main class="flex-grow p-6 md:p-10 overflow-y-auto">
+            
+            <section id="page-resumo" class="page-content page-active space-y-8">
+                <header>
+                    <h2 class="text-2xl font-bold">Bem-vindo, Renan</h2>
+                    <p class="text-gray-500 text-sm">Aqui está o que aconteceu nos seus lançamentos hoje.</p>
+                </header>
 
-            <div class="bg-dark-card rounded-2xl border border-white/5 overflow-hidden">
-                <div class="p-6 border-b border-white/5">
-                    <h4 class="font-bold uppercase tracking-widest text-xs">Últimos Atendimentos (Dados Fictícios)</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
+                        <p class="text-gray-500 text-[10px] uppercase tracking-widest">Leads Qualificados</p>
+                        <h3 class="text-3xl font-bold mt-2">157</h3>
+                    </div>
+                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
+                        <p class="text-gray-500 text-[10px] uppercase tracking-widest">VGV Total</p>
+                        <h3 class="text-3xl font-bold mt-2">R$ 2.4M</h3>
+                    </div>
+                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5 text-gold-primary">
+                        <p class="text-gray-400 text-[10px] uppercase tracking-widest">Comissão Prevista</p>
+                        <h3 class="text-3xl font-bold mt-2">R$ 96.000</h3>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
+            </section>
+
+            <section id="page-leads" class="page-content space-y-6">
+                <h2 class="text-2xl font-bold">Gestão de Leads</h2>
+                <div class="bg-dark-card rounded-2xl border border-white/5 overflow-hidden">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-black text-gray-500 uppercase text-[10px] tracking-widest">
+                        <thead class="bg-black/40 text-gray-500 text-[10px] uppercase tracking-widest">
                             <tr>
                                 <th class="p-4">Cliente</th>
-                                <th class="p-4">Interesse</th>
+                                <th class="p-4 hidden sm:table-cell">Origem</th>
                                 <th class="p-4">Status</th>
                                 <th class="p-4">Ação</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-white/5">
-                            <tr class="hover:bg-white/5">
-                                <td class="p-4">João Carlos - Riva Barra</td>
-                                <td class="p-4">3 Quartos</td>
-                                <td class="p-4"><span class="px-2 py-1 bg-gold-primary/20 text-gold-primary text-[10px] rounded-full uppercase font-bold">Quente</span></td>
-                                <td class="p-4 text-gold-primary cursor-pointer"><i class="fas fa-eye"></i></td>
+                            <tr>
+                                <td class="p-4 font-medium">Carlos Eduardo</td>
+                                <td class="p-4 hidden sm:table-cell text-gray-500">Simulador Web</td>
+                                <td class="p-4 text-green-400 font-bold text-[10px] uppercase tracking-tighter">Muito Quente</td>
+                                <td class="p-4"><button onclick="alert('Abrindo histórico do Carlos...')" class="text-gold-primary"><i class="fas fa-external-link-alt"></i></button></td>
                             </tr>
-                            <tr class="hover:bg-white/5">
-                                <td class="p-4">Maria Souza - Riva Recreio</td>
-                                <td class="p-4">2 Quartos</td>
-                                <td class="p-4"><span class="px-2 py-1 bg-blue-500/20 text-blue-500 text-[10px] rounded-full uppercase font-bold">Morna</span></td>
-                                <td class="p-4 text-gold-primary cursor-pointer"><i class="fas fa-eye"></i></td>
+                            <tr>
+                                <td class="p-4 font-medium">Juliana Martins</td>
+                                <td class="p-4 hidden sm:table-cell text-gray-500">Instagram Bio</td>
+                                <td class="p-4 text-gold-primary font-bold text-[10px] uppercase tracking-tighter">Consultoria</td>
+                                <td class="p-4"><button class="text-gold-primary"><i class="fas fa-external-link-alt"></i></button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </section>
 
-        </div>
+            <section id="page-simulador" class="page-content space-y-6">
+                <h2 class="text-2xl font-bold">Simulador Pro</h2>
+                <div class="bg-dark-card p-6 md:p-8 rounded-2xl border border-gold-primary/30 max-w-2xl">
+                    <div class="grid grid-cols-1 gap-6 mb-8">
+                        <div>
+                            <label class="text-[10px] text-gray-400 uppercase block mb-2">Valor do Imóvel (R$)</label>
+                            <input type="number" id="valorImovel" value="450000" class="w-full p-4 bg-black border border-white/10 rounded-xl text-gold-primary font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-400 uppercase block mb-2">Entrada Disponível (R$)</label>
+                            <input type="number" id="entrada" value="90000" class="w-full p-4 bg-black border border-white/10 rounded-xl text-white">
+                        </div>
+                        <button onclick="calcularSimulacao()" class="w-full py-4 bg-gold-primary text-black font-bold rounded-xl uppercase tracking-widest shadow-lg shadow-gold-primary/20">
+                            Processar Simulação
+                        </button>
+                    </div>
+                    
+                    <div id="res-container" class="hidden p-6 bg-black/60 rounded-xl border border-gold-primary/10 text-center space-y-4">
+                        <p class="text-gray-500 text-xs uppercase">Parcela Mensal (Price 30a)</p>
+                        <h2 id="parcelaFinal" class="text-4xl font-bold text-gold-primary">R$ 0,00</h2>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <script>
         function login() {
+            // Login simples para demonstração
             document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            calcularSimulacao(); // Calcula inicial
+            document.getElementById('main-dashboard').classList.remove('hidden');
+        }
+
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+
+        function switchPage(pageId) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('page-active'));
+            // Remove active-link de todos
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active-link');
+                link.classList.add('text-gray-400', 'hover:bg-white/5');
+            });
+
+            // Mostra a página clicada
+            document.getElementById('page-' + pageId).classList.add('page-active');
+            // Ativa o link no menu
+            const activeLink = document.getElementById('link-' + pageId);
+            activeLink.classList.add('active-link');
+            activeLink.classList.remove('text-gray-400', 'hover:bg-white/5');
+
+            // No mobile, fecha o menu após clicar
+            if(window.innerWidth < 768) toggleMenu();
         }
 
         function calcularSimulacao() {
-            const valor = parseFloat(document.getElementById('valorImovel').value);
-            const entrada = parseFloat(document.getElementById('entrada').value);
-            const taxaAnual = parseFloat(document.getElementById('taxa').value) / 100;
-            
+            const valor = document.getElementById('valorImovel').value;
+            const entrada = document.getElementById('entrada').value;
             const saldo = valor - entrada;
-            const taxaMensal = taxaAnual / 12;
-            const meses = 360; // 30 anos fixo para o exemplo
+            const taxaMensal = 0.0085; // Simulação 10% a.a aprox.
+            const meses = 360;
 
-            // Fórmula Price: P = (S * i) / (1 - (1+i)^-n)
             const parcela = (saldo * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses));
 
+            document.getElementById('res-container').classList.remove('hidden');
             document.getElementById('parcelaFinal').innerText = 'R$ ' + parcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById('saldoFinanciar').innerText = 'R$ ' + saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
     </script>
 </body>
