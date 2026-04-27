@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Pro | Gestão de Leads & Simulador</title>
+    <title>Nexus Pro | Sistema de Gestão Imobiliária</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,9 +32,8 @@
         .page-active { display: block; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .nav-link.active { background: #D4AF37; color: #000; font-weight: 700; transform: translateX(5px); }
-        .glass { background: rgba(20, 20, 22, 0.7); backdrop-filter: blur(12px); }
         input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; transition: all 0.3s ease; }
-        input:focus, select:focus { border-color: #D4AF37 !important; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1); outline: none; }
+        input:focus, select:focus { border-color: #D4AF37 !important; outline: none; }
         .status-select { cursor: pointer; transition: all 0.2s; border: none !important; }
     </style>
 </head>
@@ -47,98 +46,96 @@
                     <i class="fas fa-shield-halved text-brand-gold text-4xl"></i>
                 </div>
                 <h2 class="text-3xl font-black text-white uppercase tracking-tighter">Nexus <span class="text-brand-gold">Pro</span></h2>
-                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest font-bold">Acesso Restrito ao Sistema</p>
+                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest font-bold">Portal de Acesso Restrito</p>
             </div>
             <div class="space-y-5">
-                <input type="text" id="user-input" placeholder="Usuário" class="w-full p-4 rounded-xl text-sm">
-                <input type="password" id="pass-input" placeholder="Senha" class="w-full p-4 rounded-xl text-sm">
+                <input type="text" id="user-input" placeholder="Usuário" class="w-full p-4 rounded-xl text-sm outline-none focus:border-brand-gold">
+                <input type="password" id="pass-input" placeholder="Senha" class="w-full p-4 rounded-xl text-sm outline-none focus:border-brand-gold">
                 <button onclick="handleLogin(this)" class="w-full py-4 bg-brand-gold text-black font-black rounded-xl uppercase text-xs tracking-widest hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                    <i class="fas fa-lock"></i> Autenticar
+                    <i class="fas fa-lock"></i> Entrar no Sistema
                 </button>
             </div>
-            <p class="text-[10px] text-gray-600 mt-6 uppercase tracking-tighter italic font-bold">Dica: admin / admin</p>
         </div>
     </div>
 
     <div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
         
         <aside class="w-full md:w-72 bg-brand-card border-r border-brand-border flex flex-col h-screen sticky top-0 hidden md:flex z-50">
-            <div class="p-8 border-b border-brand-border">
-                <h1 class="text-xl font-black text-white">NEXUS <span class="text-brand-gold">PRO</span></h1>
+            <div class="p-8 border-b border-brand-border text-center">
+                <h1 class="text-xl font-black text-white tracking-tighter">NEXUS <span class="text-brand-gold">PRO</span></h1>
             </div>
             
             <nav class="px-4 py-6 space-y-2 flex-grow">
                 <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all active" id="btn-resumo">
-                    <i class="fas fa-chart-pie text-lg"></i> Painel Geral
+                    <i class="fas fa-chart-pie"></i> Dashboard
                 </button>
                 <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-leads">
-                    <i class="fas fa-user-group text-lg"></i> Leads & CRM
+                    <i class="fas fa-user-group"></i> Carteira de Leads
                 </button>
                 <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-simulador">
-                    <i class="fas fa-calculator text-lg"></i> Simulador Pro
+                    <i class="fas fa-calculator"></i> Simulador Pro
                 </button>
             </nav>
 
             <div class="p-6 mt-auto border-t border-brand-border">
                 <div class="bg-black/40 p-4 rounded-2xl flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-black">R</div>
+                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-black">A</div>
                     <div>
-                        <p class="text-[10px] font-black text-white uppercase leading-none">Renan Dias</p>
-                        <p class="text-[9px] text-brand-gold mt-1">CRECI 97.201</p>
+                        <p class="text-[10px] font-black text-white uppercase leading-none">Corretor On-line</p>
+                        <p class="text-[9px] text-brand-gold mt-1 tracking-widest uppercase">ID: 0097201</p>
                     </div>
                 </div>
             </div>
         </aside>
-
         <main class="flex-grow flex flex-col min-h-screen overflow-x-hidden">
             <div class="p-6 md:p-12 max-w-7xl w-full mx-auto">
                 
                 <div id="page-resumo" class="page-content page-active space-y-10">
                     <header>
-                        <h2 class="text-4xl font-black text-white tracking-tighter">Painel <span class="text-brand-gold">Executivo</span></h2>
-                        <p class="text-gray-500">Métricas de performance em tempo real.</p>
+                        <h2 class="text-4xl font-black text-white tracking-tighter">Performance <span class="text-brand-gold">Geral</span></h2>
+                        <p class="text-gray-500">Métricas consolidadas de vendas e captação.</p>
                     </header>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-brand-gold/20 transition-all">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border shadow-lg">
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">VGV Negociado</p>
                             <h3 class="text-3xl font-black text-white mt-1">R$ 4.2M</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
-                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Leads Ativos</p>
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border shadow-lg text-blue-400">
+                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Novos Leads</p>
                             <h3 class="text-3xl font-black text-white mt-1">128</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border shadow-lg text-green-400">
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Reservas</p>
-                            <h3 class="text-3xl font-black text-green-400 mt-1">07</h3>
+                            <h3 class="text-3xl font-black text-white mt-1">07</h3>
                         </div>
-                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border shadow-lg text-brand-gold">
                             <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Comissões</p>
-                            <h3 class="text-3xl font-black text-brand-gold mt-1">R$ 168k</h3>
+                            <h3 class="text-3xl font-black text-white mt-1">R$ 168k</h3>
                         </div>
                     </div>
 
                     <div class="bg-brand-card p-8 rounded-[2.5rem] border border-brand-border">
-                        <h4 class="text-xs font-black uppercase tracking-widest text-gray-500 mb-8">Performance Mensal</h4>
+                        <h4 class="text-xs font-black uppercase tracking-widest text-gray-500 mb-8 text-center md:text-left">Análise de Fluxo Mensal</h4>
                         <canvas id="performanceChart" height="100"></canvas>
                     </div>
                 </div>
 
                 <div id="page-leads" class="page-content space-y-8">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-3xl font-black text-white tracking-tight">Gestão de <span class="text-brand-gold">Oportunidades</span></h2>
+                        <h2 class="text-3xl font-black text-white tracking-tight">Gestão de <span class="text-brand-gold">Carteira</span></h2>
                         <button onclick="toggleModal()" class="bg-brand-gold text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-brand-gold/20">
                             + Nova Oportunidade
                         </button>
                     </div>
 
-                    <div class="bg-brand-card rounded-[2rem] border border-brand-border overflow-hidden shadow-2xl">
+                    <div class="bg-brand-card rounded-[2rem] border border-brand-border overflow-hidden">
                         <table class="w-full text-left">
                             <thead class="bg-black/50 text-[9px] uppercase tracking-widest text-gray-500">
                                 <tr>
                                     <th class="p-7">Investidor</th>
                                     <th class="p-7">Interesse</th>
-                                    <th class="p-7">Status (Termômetro)</th>
+                                    <th class="p-7">Termômetro</th>
                                     <th class="p-7">Ações</th>
                                 </tr>
                             </thead>
@@ -153,29 +150,29 @@
                         
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-black">
                             <div class="lg:col-span-4 bg-brand-card p-8 rounded-[2rem] border border-brand-border space-y-6">
-                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Valor Imóvel</label><input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold" value="500000"></div>
-                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Entrada</label><input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold" value="100000"></div>
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Valor do Ativo</label><input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold" value="500000"></div>
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Entrada</label><input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold" value="100000"></div>
                                 <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Prazo (Meses)</label><input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360"></div>
-                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Juros (% a.a.)</label><input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5"></div>
+                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Prazo (Meses)</label><input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360"></div>
+                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Taxa (% a.a.)</label><input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5"></div>
                                 </div>
-                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block text-brand-gold">Sistema</label>
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Amortização</label>
                                     <select id="vSistema" class="w-full p-4 rounded-xl font-bold"><option value="SAC">SAC (Decrescente)</option><option value="PRICE">PRICE (Fixa)</option></select>
                                 </div>
-                                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-widest text-xs">Analisar Viabilidade</button>
+                                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-widest text-[10px]">Analisar Viabilidade</button>
                             </div>
 
-                            <div id="res-calculo" class="lg:col-span-8 space-y-6 hidden animate-fade-in">
+                            <div id="res-calculo" class="lg:col-span-8 space-y-6 hidden">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[10px] uppercase font-bold">1ª Parcela</p><h3 id="res-primeira" class="text-3xl font-black text-white">R$ 0,00</h3></div>
-                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[10px] uppercase font-bold">Última Parcela</p><h3 id="res-ultima" class="text-3xl font-black text-gray-500">R$ 0,00</h3></div>
+                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl"><p class="text-gray-500 text-[10px] uppercase font-bold">1ª Parcela</p><h3 id="res-primeira" class="text-3xl font-black text-white">R$ 0,00</h3></div>
+                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border shadow-xl"><p class="text-gray-500 text-[10px] uppercase font-bold">Última Parcela</p><h3 id="res-ultima" class="text-3xl font-black text-gray-500">R$ 0,00</h3></div>
                                 </div>
-                                <div class="bg-brand-card p-8 rounded-3xl border border-brand-border flex flex-col md:flex-row items-center gap-10">
+                                <div class="bg-brand-card p-10 rounded-3xl border border-brand-border flex flex-col md:flex-row items-center gap-10 shadow-2xl">
                                     <div class="w-full md:w-1/2"><canvas id="loanChart"></canvas></div>
-                                    <div class="w-full md:w-1/2 space-y-6">
-                                        <div><p class="text-gray-500 text-[10px] font-black uppercase">Juros Totais</p><h4 id="res-juros-total" class="text-2xl font-bold text-red-500 tracking-tighter">R$ 0,00</h4></div>
+                                    <div class="w-full md:w-1/2 space-y-6 text-center md:text-left">
+                                        <div><p class="text-gray-500 text-[10px] font-black uppercase">Juros Totais</p><h4 id="res-juros-total" class="text-2xl font-bold text-red-500 tracking-tight">R$ 0,00</h4></div>
                                         <div class="h-px bg-brand-border"></div>
-                                        <div><p class="text-brand-gold text-[10px] font-black uppercase tracking-widest">Custo Total (CET)</p><h4 id="res-cet" class="text-3xl font-black text-white tracking-tighter">R$ 0,00</h4></div>
+                                        <div><p class="text-brand-gold text-[10px] font-black uppercase">Custo Total (CET)</p><h4 id="res-cet" class="text-3xl font-black text-white tracking-tighter">R$ 0,00</h4></div>
                                     </div>
                                 </div>
                             </div>
@@ -186,53 +183,52 @@
         </main>
     </div>
     <div id="modal-lead" class="fixed inset-0 z-[110] bg-black/95 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-brand-card w-full max-w-lg rounded-[2.5rem] border border-brand-border p-10 shadow-2xl">
-            <h3 class="text-2xl font-black mb-8 text-white tracking-tight">Novo <span class="text-brand-gold">Lead</span></h3>
+        <div class="bg-brand-card w-full max-w-lg rounded-[2.5rem] border border-brand-border p-10 shadow-2xl text-white">
+            <h3 class="text-2xl font-black mb-8">Nova <span class="text-brand-gold">Oportunidade</span></h3>
             <div class="space-y-4">
-                <input type="text" id="lead-nome" placeholder="Nome do Cliente" class="w-full p-5 rounded-2xl border-none outline-none text-white bg-black">
-                <input type="text" id="lead-interesse" placeholder="Empreendimento" class="w-full p-5 rounded-2xl border-none outline-none text-white bg-black">
-                <select id="lead-status-init" class="w-full p-5 rounded-2xl font-bold text-white bg-black">
-                    <option value="Novo">Novo Lead</option>
-                    <option value="Quente">Quente (Negociação)</option>
-                    <option value="Frio">Frio (Curiosidade)</option>
+                <input type="text" id="lead-nome" placeholder="Nome Completo" class="w-full p-4 rounded-xl border-none outline-none bg-black">
+                <input type="text" id="lead-interesse" placeholder="Empreendimento" class="w-full p-4 rounded-xl border-none outline-none bg-black">
+                <select id="lead-status-init" class="w-full p-4 rounded-xl font-bold bg-black">
+                    <option value="Novo">Novo Contato</option>
+                    <option value="Quente">Quente (Em proposta)</option>
+                    <option value="Frio">Frio (Aguardando)</option>
                 </select>
                 <div class="flex gap-4 pt-8">
-                    <button onclick="toggleModal()" class="flex-1 py-5 bg-brand-border rounded-2xl font-black text-[10px] uppercase">Cancelar</button>
-                    <button onclick="salvarLead()" class="flex-1 py-5 bg-brand-gold text-black rounded-2xl font-black text-[10px] uppercase">Registrar</button>
+                    <button onclick="toggleModal()" class="flex-1 py-5 bg-brand-border rounded-2xl font-black text-[10px] uppercase">Sair</button>
+                    <button onclick="salvarLead()" class="flex-1 py-5 bg-brand-gold text-black rounded-2xl font-black text-[10px] uppercase">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // CONFIG E ESTADO
         let leads = JSON.parse(localStorage.getItem('leads')) || [
-            { id: 1, nome: "Marcus Vinicius", interesse: "Riva Barra", status: "Quente" },
-            { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Novo" }
+            { id: 1, nome: "João de Souza", interesse: "Residencial Barra", status: "Quente" },
+            { id: 2, nome: "Maria Helena", interesse: "Planta Recreio", status: "Novo" }
         ];
         let loanChart = null;
 
-        // LOGIN
+        // LOGIN NEUTRO (admin / admin)
         function handleLogin(btn) {
             const user = document.getElementById('user-input').value;
             const pass = document.getElementById('pass-input').value;
             
             if (user === "admin" && pass === "admin") {
                 btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Autenticando...';
+                btn.disabled = true;
                 setTimeout(() => {
                     document.getElementById('login-overlay').classList.add('opacity-0', 'invisible');
                     setTimeout(() => {
                         document.getElementById('app').classList.remove('hidden');
                         renderLeads(); initChart();
-                        Swal.fire({ title: 'Bem-vindo, Renan!', icon: 'success', background: '#141416', color: '#fff', confirmButtonColor: '#D4AF37' });
+                        Swal.fire({ title: 'Sessão Iniciada', text: 'Painel administrativo liberado.', icon: 'success', background: '#141416', color: '#fff', confirmButtonColor: '#D4AF37' });
                     }, 500);
                 }, 1200);
             } else {
-                Swal.fire({ title: 'Erro de Acesso', text: 'Credenciais inválidas!', icon: 'error', background: '#141416', color: '#fff' });
+                Swal.fire({ title: 'Acesso Negado', text: 'Usuário ou senha inválidos.', icon: 'error', background: '#141416', color: '#fff' });
             }
         }
 
-        // NAVEGAÇÃO SPA
         function navigate(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
@@ -241,7 +237,6 @@
             document.getElementById('btn-' + pageId).classList.remove('text-gray-500');
         }
 
-        // CRM
         function toggleModal() { document.getElementById('modal-lead').classList.toggle('hidden'); document.getElementById('modal-lead').classList.toggle('flex'); }
 
         function salvarLead() {
@@ -287,7 +282,6 @@
             }).join('');
         }
 
-        // SIMULADOR
         function processarCalculoPro() {
             const vImovel = parseFloat(document.getElementById('vImovel').value);
             const vEntrada = parseFloat(document.getElementById('vEntrada').value);
@@ -321,8 +315,10 @@
 
         function updateLoanChart(p, j) {
             const ctx = document.getElementById('loanChart').getContext('2d');
-            const percP = ((p / (p+j)) * 100).toFixed(1);
-            const percJ = ((j / (p+j)) * 100).toFixed(1);
+            const total = p + j;
+            const percP = ((p / total) * 100).toFixed(1);
+            const percJ = ((j / total) * 100).toFixed(1);
+
             if(loanChart) loanChart.destroy();
             loanChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -330,13 +326,13 @@
                     labels: [`Imóvel (${percP}%)`, `Juros (${percJ}%)`],
                     datasets: [{ data: [p, j], backgroundColor: ['#D4AF37', '#232326'], borderWidth: 0 }]
                 },
-                options: { cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { weight: 'bold' } } } } }
+                options: { cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { size: 10, weight: 'bold' } } } } }
             });
         }
 
         function initChart() {
             const ctx = document.getElementById('performanceChart').getContext('2d');
-            new Chart(ctx, { type: 'line', data: { labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], datasets: [{ label: 'Atendimentos', data: [45, 98, 70, 125, 110, 157], borderColor: '#D4AF37', tension: 0.4, fill: true, backgroundColor: 'rgba(212, 175, 55, 0.05)' }] }, options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1A1A1C' }, ticks: { color: '#444' } }, x: { grid: { display: false }, ticks: { color: '#444' } } } } });
+            new Chart(ctx, { type: 'line', data: { labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'], datasets: [{ label: 'Conversão', data: [45, 98, 70, 125, 110, 157], borderColor: '#D4AF37', tension: 0.4, fill: true, backgroundColor: 'rgba(212, 175, 55, 0.05)' }] }, options: { plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1A1A1C' }, ticks: { color: '#444' } }, x: { grid: { display: false }, ticks: { color: '#444' } } } } });
         }
     </script>
 </body>
