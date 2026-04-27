@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Premium | Renan Dias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: {
+                        'gold-primary': '#D4AF37',
+                        'dark-obsidian': '#050505',
+                        'dark-card': '#111111',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass { background: rgba(17, 17, 17, 0.8); backdrop-filter: blur(10px); }
+        input:focus { outline: none; border-color: #D4AF37 !important; }
+    </style>
+</head>
+<body class="bg-dark-obsidian text-white font-sans antialiased">
+
+    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="max-w-md w-full bg-dark-card p-10 rounded-2xl border border-white/5 shadow-2xl">
+            <div class="text-center mb-8">
+                <h2 class="text-gold-primary text-2xl font-bold tracking-widest uppercase">Admin Portal</h2>
+                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Renan Dias | CRECI 97.201</p>
+            </div>
+            <div class="space-y-4">
+                <input type="text" placeholder="Usuário" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm transition-all">
+                <input type="password" placeholder="Senha" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm transition-all">
+                <button onclick="login()" class="w-full py-4 bg-gold-primary text-black font-bold rounded-xl uppercase tracking-widest hover:bg-[#F1D592] transition-all">
+                    Acessar Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <div class="w-full md:w-64 bg-dark-card border-r border-white/5 p-6 flex flex-col">
+            <h1 class="text-gold-primary font-bold tracking-tighter text-xl mb-10">RENAN DIAS</h1>
+            <nav class="space-y-2 flex-grow">
+                <a href="#" class="flex items-center space-x-3 p-3 bg-white/5 rounded-lg text-gold-primary">
+                    <i class="fas fa-chart-line"></i> <span>Resumo</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-lg transition-all text-gray-400">
+                    <i class="fas fa-users"></i> <span>Meus Leads</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 p-3 hover:bg-white/5 rounded-lg transition-all text-gray-400">
+                    <i class="fas fa-calculator"></i> <span>Simulador Pro</span>
+                </a>
+            </nav>
+            <button onclick="location.reload()" class="mt-auto flex items-center space-x-3 p-3 text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
+                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+            </button>
+        </div>
+
+        <div class="flex-grow p-6 md:p-10 space-y-8 overflow-y-auto">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
+                    <p class="text-gray-500 text-xs uppercase tracking-widest">Leads Novos (Mês)</p>
+                    <h3 class="text-3xl font-bold mt-2">42</h3>
+                    <p class="text-green-500 text-[10px] mt-1 font-bold">+12% vs mês anterior</p>
+                </div>
+                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
+                    <p class="text-gray-500 text-xs uppercase tracking-widest">VGV em Aberto</p>
+                    <h3 class="text-3xl font-bold mt-2">R$ 1.2M</h3>
+                    <p class="text-gold-primary text-[10px] mt-1 font-bold">3 negociações ativas</p>
+                </div>
+                <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
+                    <p class="text-gray-500 text-xs uppercase tracking-widest">Comissões Previstas</p>
+                    <h3 class="text-3xl font-bold mt-2 text-gold-primary">R$ 48.000</h3>
+                </div>
+            </div>
+
+            <div class="bg-dark-card p-8 rounded-2xl border border-gold-primary/20 shadow-xl">
+                <h4 class="text-gold-primary font-bold uppercase tracking-widest mb-6">Simulador de Investimento Pro</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-black">
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-gray-400 uppercase">Valor do Imóvel (R$)</label>
+                        <input type="number" id="valorImovel" value="500000" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-gray-400 uppercase">Entrada (R$)</label>
+                        <input type="number" id="entrada" value="100000" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] text-gray-400 uppercase">Taxa de Juros (% a.a.)</label>
+                        <input type="number" id="taxa" value="10.5" class="w-full p-3 bg-black text-white border border-white/10 rounded-lg">
+                    </div>
+                    <div class="space-y-2 flex items-end">
+                        <button onclick="calcularSimulacao()" class="w-full p-3 bg-gold-primary font-bold rounded-lg uppercase text-xs tracking-widest hover:scale-[1.02] transition-all">Calcular</button>
+                    </div>
+                </div>
+                <div id="resultado" class="p-6 bg-black rounded-xl border border-white/5 flex flex-col md:flex-row justify-around text-center">
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase">Parcela Mensal Estimada</p>
+                        <h2 id="parcelaFinal" class="text-2xl font-bold text-gold-primary">R$ 0,00</h2>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase">Saldo a Financiar</p>
+                        <h2 id="saldoFinanciar" class="text-2xl font-bold">R$ 0,00</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-dark-card rounded-2xl border border-white/5 overflow-hidden">
+                <div class="p-6 border-b border-white/5">
+                    <h4 class="font-bold uppercase tracking-widest text-xs">Últimos Atendimentos (Dados Fictícios)</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-black text-gray-500 uppercase text-[10px] tracking-widest">
+                            <tr>
+                                <th class="p-4">Cliente</th>
+                                <th class="p-4">Interesse</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/5">
+                                <td class="p-4">João Carlos - Riva Barra</td>
+                                <td class="p-4">3 Quartos</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-gold-primary/20 text-gold-primary text-[10px] rounded-full uppercase font-bold">Quente</span></td>
+                                <td class="p-4 text-gold-primary cursor-pointer"><i class="fas fa-eye"></i></td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-4">Maria Souza - Riva Recreio</td>
+                                <td class="p-4">2 Quartos</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-blue-500/20 text-blue-500 text-[10px] rounded-full uppercase font-bold">Morna</span></td>
+                                <td class="p-4 text-gold-primary cursor-pointer"><i class="fas fa-eye"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            calcularSimulacao(); // Calcula inicial
+        }
+
+        function calcularSimulacao() {
+            const valor = parseFloat(document.getElementById('valorImovel').value);
+            const entrada = parseFloat(document.getElementById('entrada').value);
+            const taxaAnual = parseFloat(document.getElementById('taxa').value) / 100;
+            
+            const saldo = valor - entrada;
+            const taxaMensal = taxaAnual / 12;
+            const meses = 360; // 30 anos fixo para o exemplo
+
+            // Fórmula Price: P = (S * i) / (1 - (1+i)^-n)
+            const parcela = (saldo * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses));
+
+            document.getElementById('parcelaFinal').innerText = 'R$ ' + parcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('saldoFinanciar').innerText = 'R$ ' + saldo.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+    </script>
+</body>
+</html>
