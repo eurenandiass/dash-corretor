@@ -3,203 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Premium | Renan Dias</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Nexus CRM | Gestão Imobiliária Profissional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        'gold-primary': '#D4AF37',
-                        'dark-obsidian': '#050505',
-                        'dark-card': '#111111',
+                        'brand-gold': '#D4AF37',
+                        'brand-dark': '#0A0A0B',
+                        'brand-card': '#141416',
+                        'brand-border': '#232326'
                     }
                 }
             }
         }
     </script>
     <style>
-        .active-link { color: #D4AF37; background: rgba(212, 175, 55, 0.1); border-right: 3px solid #D4AF37; }
-        .page-content { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .page-active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page-content { display: none; }
+        .page-active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-link.active { background: #D4AF37; color: #000; font-weight: 600; }
+        input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; }
+        input:focus { border-color: #D4AF37 !important; outline: none; }
     </style>
 </head>
-<body class="bg-dark-obsidian text-white font-sans antialiased">
+<body class="bg-brand-dark text-gray-200 font-sans antialiased">
 
-    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
-        <div class="max-w-md w-full bg-dark-card p-10 rounded-2xl border border-white/5 shadow-2xl">
-            <div class="text-center mb-8">
-                <h2 class="text-gold-primary text-2xl font-bold tracking-widest uppercase">Admin Portal</h2>
-                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Renan Dias | Sistema Interno</p>
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-brand-dark flex items-center justify-center px-4">
+        <div class="max-w-md w-full bg-brand-card p-10 rounded-2xl border border-brand-border shadow-2xl">
+            <div class="text-center mb-10">
+                <div class="inline-block p-3 bg-brand-gold/10 rounded-2xl mb-4">
+                    <i class="fas fa-shield-halved text-brand-gold text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold tracking-tight text-white">NEXUS <span class="text-brand-gold">CRM</span></h2>
+                <p class="text-gray-500 text-sm mt-1">Acesse sua central de inteligência</p>
             </div>
             <div class="space-y-4">
-                <input type="text" id="user" placeholder="Usuário" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm focus:border-gold-primary outline-none transition-all">
-                <input type="password" id="pass" placeholder="Senha" class="w-full p-4 bg-black border border-white/10 rounded-xl text-sm focus:border-gold-primary outline-none transition-all">
-                <button onclick="login()" class="w-full py-4 bg-gold-primary text-black font-bold rounded-xl uppercase tracking-widest hover:bg-[#F1D592] transition-all">
-                    Entrar no Sistema
+                <div>
+                    <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block font-bold">Acesso Restrito</label>
+                    <input type="text" placeholder="Usuário" class="w-full p-4 rounded-xl text-sm">
+                </div>
+                <input type="password" placeholder="Senha" class="w-full p-4 rounded-xl text-sm">
+                <button onclick="handleLogin()" class="w-full py-4 bg-brand-gold text-black font-bold rounded-xl uppercase text-xs tracking-widest hover:brightness-110 transition-all">
+                    Autenticar
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="main-dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+    <div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
         
-        <div class="md:hidden flex items-center justify-between p-4 bg-dark-card border-b border-white/5">
-            <span class="text-gold-primary font-bold tracking-widest uppercase text-sm">Renan Dias</span>
-            <button onclick="toggleMenu()" class="text-gold-primary text-2xl"><i class="fas fa-bars"></i></button>
-        </div>
-
-        <aside id="sidebar" class="hidden md:flex flex-col w-full md:w-64 bg-dark-card border-r border-white/5 p-6 fixed md:relative z-50 h-full">
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-gold-primary font-bold tracking-tighter text-xl">DASHBOARD</h1>
-                <button onclick="toggleMenu()" class="md:hidden text-white"><i class="fas fa-times"></i></button>
+        <aside class="w-full md:w-72 bg-brand-card border-r border-brand-border flex flex-col h-screen sticky top-0 hidden md:flex">
+            <div class="p-8 border-b border-brand-border">
+                <h1 class="text-xl font-black tracking-tighter text-white">NEXUS <span class="text-brand-gold">PRO</span></h1>
             </div>
             
-            <nav class="space-y-2 flex-grow">
-                <button onclick="switchPage('resumo')" id="link-resumo" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all active-link">
-                    <i class="fas fa-chart-line"></i> <span>Resumo</span>
+            <nav class="p-4 space-y-2 flex-grow">
+                <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all active" id="btn-resumo">
+                    <i class="fas fa-grid-2"></i> Dashboard
                 </button>
-                <button onclick="switchPage('leads')" id="link-leads" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all text-gray-400 hover:bg-white/5">
-                    <i class="fas fa-users"></i> <span>Meus Leads</span>
+                <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all text-gray-500 hover:text-white" id="btn-leads">
+                    <i class="fas fa-users"></i> Leads & CRM
                 </button>
-                <button onclick="switchPage('simulador')" id="link-simulador" class="nav-link w-full flex items-center space-x-3 p-4 rounded-lg transition-all text-gray-400 hover:bg-white/5">
-                    <i class="fas fa-calculator"></i> <span>Simulador Pro</span>
+                <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all text-gray-500 hover:text-white" id="btn-simulador">
+                    <i class="fas fa-calculator"></i> Simulador Pro
                 </button>
             </nav>
-            
-            <button onclick="location.reload()" class="mt-auto flex items-center space-x-3 p-4 text-red-500 hover:bg-red-500/10 rounded-lg transition-all">
-                <i class="fas fa-sign-out-alt"></i> <span>Deslogar</span>
-            </button>
+
+            <div class="p-6 border-t border-brand-border">
+                <div class="flex items-center gap-3 p-2">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-bold">R</div>
+                    <div>
+                        <p class="text-xs font-bold text-white leading-none">Corretor On-line</p>
+                        <p class="text-[10px] text-gray-500 mt-1">CRECI 97.201</p>
+                    </div>
+                </div>
+            </div>
         </aside>
 
-        <main class="flex-grow p-6 md:p-10 overflow-y-auto">
+        <main class="flex-grow flex flex-col min-h-screen overflow-x-hidden">
             
-            <section id="page-resumo" class="page-content page-active space-y-8">
-                <header>
-                    <h2 class="text-2xl font-bold">Bem-vindo, Renan</h2>
-                    <p class="text-gray-500 text-sm">Aqui está o que aconteceu nos seus lançamentos hoje.</p>
-                </header>
+            <div class="md:hidden p-4 bg-brand-card border-b border-brand-border flex justify-between items-center">
+                <span class="font-bold text-brand-gold">NEXUS</span>
+                <button class="text-2xl"><i class="fas fa-bars"></i></button>
+            </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
-                        <p class="text-gray-500 text-[10px] uppercase tracking-widest">Leads Qualificados</p>
-                        <h3 class="text-3xl font-bold mt-2">157</h3>
+            <div class="p-6 md:p-12 max-w-7xl w-full mx-auto">
+                
+                <div id="page-resumo" class="page-content page-active space-y-10">
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white tracking-tight">Performance Geral</h2>
+                            <p class="text-gray-500">Métricas consolidadas do mercado RJ.</p>
+                        </div>
+                        <div class="text-right hidden md:block">
+                            <span class="text-xs text-gray-500 uppercase tracking-widest">Última Atualização</span>
+                            <p class="text-sm font-medium">Hoje, 16:45</p>
+                        </div>
                     </div>
-                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5">
-                        <p class="text-gray-500 text-[10px] uppercase tracking-widest">VGV Total</p>
-                        <h3 class="text-3xl font-bold mt-2">R$ 2.4M</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                            <i class="fas fa-arrow-trend-up text-brand-gold mb-4"></i>
+                            <p class="text-gray-500 text-[10px] uppercase font-bold">VGV Negociado</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">R$ 4.2M</h3>
+                        </div>
+                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                            <i class="fas fa-user-plus text-blue-400 mb-4"></i>
+                            <p class="text-gray-500 text-[10px] uppercase font-bold">Novos Leads</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">128</h3>
+                        </div>
+                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                            <i class="fas fa-house-circle-check text-green-400 mb-4"></i>
+                            <p class="text-gray-500 text-[10px] uppercase font-bold">Unidades Reservadas</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">07</h3>
+                        </div>
+                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
+                            <i class="fas fa-coins text-brand-gold mb-4"></i>
+                            <p class="text-gray-500 text-[10px] uppercase font-bold">Comissões Brutas</p>
+                            <h3 class="text-2xl font-bold text-brand-gold mt-1">R$ 168k</h3>
+                        </div>
                     </div>
-                    <div class="bg-dark-card p-6 rounded-2xl border border-white/5 text-gold-primary">
-                        <p class="text-gray-400 text-[10px] uppercase tracking-widest">Comissão Prevista</p>
-                        <h3 class="text-3xl font-bold mt-2">R$ 96.000</h3>
+
+                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border">
+                        <h4 class="text-sm font-bold uppercase tracking-widest mb-8">Fluxo de Captação mensal</h4>
+                        <canvas id="performanceChart" height="100"></canvas>
                     </div>
                 </div>
-            </section>
 
-            <section id="page-leads" class="page-content space-y-6">
-                <h2 class="text-2xl font-bold">Gestão de Leads</h2>
-                <div class="bg-dark-card rounded-2xl border border-white/5 overflow-hidden">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-black/40 text-gray-500 text-[10px] uppercase tracking-widest">
-                            <tr>
-                                <th class="p-4">Cliente</th>
-                                <th class="p-4 hidden sm:table-cell">Origem</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            <tr>
-                                <td class="p-4 font-medium">Carlos Eduardo</td>
-                                <td class="p-4 hidden sm:table-cell text-gray-500">Simulador Web</td>
-                                <td class="p-4 text-green-400 font-bold text-[10px] uppercase tracking-tighter">Muito Quente</td>
-                                <td class="p-4"><button onclick="alert('Abrindo histórico do Carlos...')" class="text-gold-primary"><i class="fas fa-external-link-alt"></i></button></td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 font-medium">Juliana Martins</td>
-                                <td class="p-4 hidden sm:table-cell text-gray-500">Instagram Bio</td>
-                                <td class="p-4 text-gold-primary font-bold text-[10px] uppercase tracking-tighter">Consultoria</td>
-                                <td class="p-4"><button class="text-gold-primary"><i class="fas fa-external-link-alt"></i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="page-simulador" class="page-content space-y-6">
-                <h2 class="text-2xl font-bold">Simulador Pro</h2>
-                <div class="bg-dark-card p-6 md:p-8 rounded-2xl border border-gold-primary/30 max-w-2xl">
-                    <div class="grid grid-cols-1 gap-6 mb-8">
-                        <div>
-                            <label class="text-[10px] text-gray-400 uppercase block mb-2">Valor do Imóvel (R$)</label>
-                            <input type="number" id="valorImovel" value="450000" class="w-full p-4 bg-black border border-white/10 rounded-xl text-gold-primary font-bold">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-gray-400 uppercase block mb-2">Entrada Disponível (R$)</label>
-                            <input type="number" id="entrada" value="90000" class="w-full p-4 bg-black border border-white/10 rounded-xl text-white">
-                        </div>
-                        <button onclick="calcularSimulacao()" class="w-full py-4 bg-gold-primary text-black font-bold rounded-xl uppercase tracking-widest shadow-lg shadow-gold-primary/20">
-                            Processar Simulação
+                <div id="page-leads" class="page-content space-y-8">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-3xl font-bold text-white tracking-tight">Gestão de Carteira</h2>
+                        <button onclick="toggleModal()" class="bg-brand-gold text-black px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-105 transition-all">
+                            + Novo Lead
                         </button>
                     </div>
-                    
-                    <div id="res-container" class="hidden p-6 bg-black/60 rounded-xl border border-gold-primary/10 text-center space-y-4">
-                        <p class="text-gray-500 text-xs uppercase">Parcela Mensal (Price 30a)</p>
-                        <h2 id="parcelaFinal" class="text-4xl font-bold text-gold-primary">R$ 0,00</h2>
+
+                    <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden">
+                        <table class="w-full text-left">
+                            <thead class="bg-black/50 text-[10px] uppercase tracking-widest text-gray-500">
+                                <tr>
+                                    <th class="p-6">Nome do Cliente</th>
+                                    <th class="p-6">Interesse</th>
+                                    <th class="p-6">Status</th>
+                                    <th class="p-6">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm">
+                                </tbody>
+                        </table>
                     </div>
                 </div>
-            </section>
 
+                <div id="page-simulador" class="page-content">
+                    <div class="max-w-2xl">
+                        <h2 class="text-3xl font-bold text-white tracking-tight mb-8">Inteligência Financeira</h2>
+                        <div class="bg-brand-card p-10 rounded-3xl border border-brand-gold/20 space-y-6 shadow-2xl">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Valor do Ativo</label>
+                                    <input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold text-xl" value="600000">
+                                </div>
+                                <div>
+                                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Entrada (Cash)</label>
+                                    <input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold text-xl" value="120000">
+                                </div>
+                            </div>
+                            <button onclick="processarCalculo()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-[0.2em] shadow-xl shadow-brand-gold/10 hover:translate-y-[-2px] transition-all">
+                                Gerar Projeção de Parcela
+                            </button>
+                            <div id="resultadoProjecao" class="hidden mt-10 p-8 bg-black rounded-3xl border border-brand-border text-center">
+                                <p class="text-gray-500 text-xs uppercase tracking-widest">Parcela Mensal Estimada (Price)</p>
+                                <h3 id="valorFinal" class="text-5xl font-black text-brand-gold mt-4 tracking-tighter">R$ 0,00</h3>
+                                <p class="text-[10px] text-gray-600 mt-6 italic">*Simulação baseada em taxas médias de 10.5% a.a.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </main>
     </div>
 
+    <div id="modal-lead" class="fixed inset-0 z-[110] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-brand-border p-8">
+            <h3 class="text-xl font-bold mb-6">Cadastrar Potencial Comprador</h3>
+            <div class="space-y-4">
+                <input type="text" id="lead-nome" placeholder="Nome Completo" class="w-full p-4 rounded-xl">
+                <select id="lead-interesse" class="w-full p-4 rounded-xl">
+                    <option value="Lançamento Barra">Lançamento Barra</option>
+                    <option value="Lançamento Recreio">Lançamento Recreio</option>
+                    <option value="Investimento">Investimento</option>
+                </select>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="toggleModal()" class="flex-1 py-4 bg-brand-border rounded-xl font-bold text-xs uppercase">Cancelar</button>
+                    <button onclick="salvarLead()" class="flex-1 py-4 bg-brand-gold text-black rounded-xl font-bold text-xs uppercase">Confirmar Cadastro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function login() {
-            // Login simples para demonstração
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('main-dashboard').classList.remove('hidden');
+        // ESTADO DA APLICAÇÃO
+        let leads = JSON.parse(localStorage.getItem('leads')) || [
+            { id: 1, nome: "Marcus Vinicius", interesse: "Riva Barra", status: "Quente" },
+            { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Frio" }
+        ];
+
+        function handleLogin() {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('app').classList.remove('hidden');
+            renderLeads();
+            initChart();
         }
 
-        function toggleMenu() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
-        }
-
-        function switchPage(pageId) {
-            // Esconde todas as páginas
-            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('page-active'));
-            // Remove active-link de todos
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active-link');
-                link.classList.add('text-gray-400', 'hover:bg-white/5');
+        function navigate(page) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
+            document.getElementById('page-' + page).classList.add('page-active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => {
+                l.classList.remove('active', 'text-black');
+                l.classList.add('text-gray-500');
             });
-
-            // Mostra a página clicada
-            document.getElementById('page-' + pageId).classList.add('page-active');
-            // Ativa o link no menu
-            const activeLink = document.getElementById('link-' + pageId);
-            activeLink.classList.add('active-link');
-            activeLink.classList.remove('text-gray-400', 'hover:bg-white/5');
-
-            // No mobile, fecha o menu após clicar
-            if(window.innerWidth < 768) toggleMenu();
+            document.getElementById('btn-' + page).classList.add('active');
+            document.getElementById('btn-' + page).classList.remove('text-gray-500');
         }
 
-        function calcularSimulacao() {
-            const valor = document.getElementById('valorImovel').value;
-            const entrada = document.getElementById('entrada').value;
-            const saldo = valor - entrada;
-            const taxaMensal = 0.0085; // Simulação 10% a.a aprox.
+        function toggleModal() {
+            const m = document.getElementById('modal-lead');
+            m.classList.toggle('hidden');
+            m.classList.toggle('flex');
+        }
+
+        function salvarLead() {
+            const nome = document.getElementById('lead-nome').value;
+            const interesse = document.getElementById('lead-interesse').value;
+            if(!nome) return alert("Insira o nome");
+
+            const novoLead = { id: Date.now(), nome, interesse, status: "Novo" };
+            leads.push(novoLead);
+            localStorage.setItem('leads', JSON.stringify(leads));
+            renderLeads();
+            toggleModal();
+            document.getElementById('lead-nome').value = "";
+        }
+
+        function deletarLead(id) {
+            leads = leads.filter(l => l.id !== id);
+            localStorage.setItem('leads', JSON.stringify(leads));
+            renderLeads();
+        }
+
+        function renderLeads() {
+            const body = document.getElementById('leads-table-body');
+            body.innerHTML = leads.map(l => `
+                <tr class="hover:bg-white/[0.02] transition-colors">
+                    <td class="p-6 font-semibold text-white">${l.nome}</td>
+                    <td class="p-6 text-gray-500">${l.interesse}</td>
+                    <td class="p-6">
+                        <span class="px-3 py-1 bg-brand-gold/10 text-brand-gold text-[10px] font-black uppercase rounded-full border border-brand-gold/20">${l.status}</span>
+                    </td>
+                    <td class="p-6">
+                        <button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function processarCalculo() {
+            const v = document.getElementById('vImovel').value;
+            const e = document.getElementById('vEntrada').value;
+            const saldo = v - e;
+            const taxaMensal = 0.0085; 
             const meses = 360;
+            const p = (saldo * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses));
+            
+            document.getElementById('resultadoProjecao').classList.remove('hidden');
+            document.getElementById('valorFinal').innerText = p.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-            const parcela = (saldo * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses));
-
-            document.getElementById('res-container').classList.remove('hidden');
-            document.getElementById('parcelaFinal').innerText = 'R$ ' + parcela.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        function initChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Leads Captados',
+                        data: [65, 82, 70, 95, 110, 128],
+                        borderColor: '#D4AF37',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#D4AF37'
+                    }]
+                },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { grid: { color: '#232326' }, ticks: { color: '#555' } },
+                        x: { grid: { display: false }, ticks: { color: '#555' } }
+                    }
+                }
+            });
         }
     </script>
 </body>
