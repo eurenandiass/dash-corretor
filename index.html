@@ -1,316 +1,155 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus CRM | Gestão Imobiliária Profissional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        'brand-gold': '#D4AF37',
-                        'brand-dark': '#0A0A0B',
-                        'brand-card': '#141416',
-                        'brand-border': '#232326'
-                    }
-                }
+<div id="page-simulador" class="page-content">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-white tracking-tight">Simulador Financeiro Pro</h2>
+                <p class="text-gray-500">Análise técnica de viabilidade e sistemas de amortização.</p>
+            </div>
+            <div class="bg-brand-gold/10 text-brand-gold px-4 py-2 rounded-lg border border-brand-gold/20 text-xs font-bold uppercase tracking-widest">
+                Módulo Bank-Ready
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1 bg-brand-card p-6 rounded-3xl border border-brand-border space-y-5">
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Valor do Imóvel</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-4 text-gray-500 text-sm font-bold">R$</span>
+                        <input type="number" id="vImovel" class="w-full p-4 pl-10 rounded-xl font-bold" value="500000">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Entrada</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-4 text-gray-500 text-sm font-bold">R$</span>
+                        <input type="number" id="vEntrada" class="w-full p-4 pl-10 rounded-xl" value="100000">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Prazo (Meses)</label>
+                        <input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Juros (% a.a.)</label>
+                        <input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5" step="0.1">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest text-brand-gold">Sistema de Amortização</label>
+                    <select id="vSistema" class="w-full p-4 rounded-xl font-bold cursor-pointer">
+                        <option value="SAC">SAC (Decrescente)</option>
+                        <option value="PRICE">PRICE (Fixa)</option>
+                    </select>
+                </div>
+                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-[0.2em] shadow-xl hover:translate-y-[-2px] transition-all">
+                    Processar Análise
+                </button>
+            </div>
+
+            <div id="res-calculo" class="lg:col-span-2 space-y-6 hidden animate-fade-in">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
+                        <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Primeira Parcela</p>
+                        <h3 id="res-primeira" class="text-3xl font-black text-white">R$ 0,00</h3>
+                    </div>
+                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
+                        <p class="text-gray-500 text-[10px] uppercase font-bold mb-1">Última Parcela</p>
+                        <h3 id="res-ultima" class="text-3xl font-black text-gray-400">R$ 0,00</h3>
+                    </div>
+                </div>
+
+                <div class="bg-brand-card p-8 rounded-3xl border border-brand-border">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2">
+                            <canvas id="loanChart"></canvas>
+                        </div>
+                        <div class="w-full md:w-1/2 space-y-4">
+                            <div>
+                                <p class="text-gray-500 text-[10px] uppercase font-bold">Total em Juros</p>
+                                <h4 id="res-juros-total" class="text-xl font-bold text-red-400">R$ 0,00</h4>
+                            </div>
+                            <div class="h-[1px] bg-brand-border"></div>
+                            <div>
+                                <p class="text-gray-500 text-[10px] uppercase font-bold">Custo Efetivo Total (CET)</p>
+                                <h4 id="res-cet" class="text-2xl font-black text-brand-gold">R$ 0,00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let loanChart = null;
+
+function processarCalculoPro() {
+    const vImovel = parseFloat(document.getElementById('vImovel').value);
+    const vEntrada = parseFloat(document.getElementById('vEntrada').value);
+    const n = parseInt(document.getElementById('vPrazo').value);
+    const iAnual = parseFloat(document.getElementById('vTaxa').value) / 100;
+    const sistema = document.getElementById('vSistema').value;
+
+    const saldoDevedor = vImovel - vEntrada;
+    const iMensal = Math.pow(1 + iAnual, 1/12) - 1; // Juros Compostos Reais
+
+    let primeiraParcela, ultimaParcela, totalPago, totalJuros;
+
+    if (sistema === "PRICE") {
+        primeiraParcela = (saldoDevedor * iMensal) / (1 - Math.pow(1 + iMensal, -n));
+        ultimaParcela = primeiraParcela;
+        totalPago = primeiraParcela * n;
+        totalJuros = totalPago - saldoDevedor;
+    } else {
+        // Lógica SAC
+        const amortizacaoConstante = saldoDevedor / n;
+        primeiraParcela = amortizacaoConstante + (saldoDevedor * iMensal);
+        ultimaParcela = amortizacaoConstante + (amortizacaoConstante * iMensal);
+        
+        // Soma da PA para juros do SAC
+        totalJuros = ((saldoDevedor * iMensal) + (amortizacaoConstante * iMensal)) * n / 2;
+        totalPago = saldoDevedor + totalJuros;
+    }
+
+    // Exibir e Formatar
+    document.getElementById('res-calculo').classList.remove('hidden');
+    document.getElementById('res-primeira').innerText = formatMoeda(primeiraParcela);
+    document.getElementById('res-ultima').innerText = formatMoeda(ultimaParcela);
+    document.getElementById('res-juros-total').innerText = formatMoeda(totalJuros);
+    document.getElementById('res-cet').innerText = formatMoeda(totalPago);
+
+    updateChart(saldoDevedor, totalJuros);
+}
+
+function formatMoeda(v) {
+    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function updateChart(principal, juros) {
+    const ctx = document.getElementById('loanChart').getContext('2d');
+    
+    if(loanChart) loanChart.destroy();
+    
+    loanChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Financiado', 'Juros'],
+            datasets: [{
+                data: [principal, juros],
+                backgroundColor: ['#D4AF37', '#232326'],
+                borderWidth: 0,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            cutout: '70%',
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#555', font: { size: 10 } } }
             }
         }
-    </script>
-    <style>
-        .page-content { display: none; }
-        .page-active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-link.active { background: #D4AF37; color: #000; font-weight: 600; }
-        input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; }
-        input:focus { border-color: #D4AF37 !important; outline: none; }
-    </style>
-</head>
-<body class="bg-brand-dark text-gray-200 font-sans antialiased">
-
-    <div id="login-overlay" class="fixed inset-0 z-[100] bg-brand-dark flex items-center justify-center px-4">
-        <div class="max-w-md w-full bg-brand-card p-10 rounded-2xl border border-brand-border shadow-2xl">
-            <div class="text-center mb-10">
-                <div class="inline-block p-3 bg-brand-gold/10 rounded-2xl mb-4">
-                    <i class="fas fa-shield-halved text-brand-gold text-3xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold tracking-tight text-white">NEXUS <span class="text-brand-gold">CRM</span></h2>
-                <p class="text-gray-500 text-sm mt-1">Acesse sua central de inteligência</p>
-            </div>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] uppercase tracking-widest text-gray-500 mb-1 block font-bold">Acesso Restrito</label>
-                    <input type="text" placeholder="Usuário" class="w-full p-4 rounded-xl text-sm">
-                </div>
-                <input type="password" placeholder="Senha" class="w-full p-4 rounded-xl text-sm">
-                <button onclick="handleLogin()" class="w-full py-4 bg-brand-gold text-black font-bold rounded-xl uppercase text-xs tracking-widest hover:brightness-110 transition-all">
-                    Autenticar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
-        
-        <aside class="w-full md:w-72 bg-brand-card border-r border-brand-border flex flex-col h-screen sticky top-0 hidden md:flex">
-            <div class="p-8 border-b border-brand-border">
-                <h1 class="text-xl font-black tracking-tighter text-white">NEXUS <span class="text-brand-gold">PRO</span></h1>
-            </div>
-            
-            <nav class="p-4 space-y-2 flex-grow">
-                <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all active" id="btn-resumo">
-                    <i class="fas fa-grid-2"></i> Dashboard
-                </button>
-                <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all text-gray-500 hover:text-white" id="btn-leads">
-                    <i class="fas fa-users"></i> Leads & CRM
-                </button>
-                <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-3 p-4 rounded-xl text-sm transition-all text-gray-500 hover:text-white" id="btn-simulador">
-                    <i class="fas fa-calculator"></i> Simulador Pro
-                </button>
-            </nav>
-
-            <div class="p-6 border-t border-brand-border">
-                <div class="flex items-center gap-3 p-2">
-                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-bold">R</div>
-                    <div>
-                        <p class="text-xs font-bold text-white leading-none">Corretor On-line</p>
-                        <p class="text-[10px] text-gray-500 mt-1">CRECI 97.201</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <main class="flex-grow flex flex-col min-h-screen overflow-x-hidden">
-            
-            <div class="md:hidden p-4 bg-brand-card border-b border-brand-border flex justify-between items-center">
-                <span class="font-bold text-brand-gold">NEXUS</span>
-                <button class="text-2xl"><i class="fas fa-bars"></i></button>
-            </div>
-
-            <div class="p-6 md:p-12 max-w-7xl w-full mx-auto">
-                
-                <div id="page-resumo" class="page-content page-active space-y-10">
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <h2 class="text-3xl font-bold text-white tracking-tight">Performance Geral</h2>
-                            <p class="text-gray-500">Métricas consolidadas do mercado RJ.</p>
-                        </div>
-                        <div class="text-right hidden md:block">
-                            <span class="text-xs text-gray-500 uppercase tracking-widest">Última Atualização</span>
-                            <p class="text-sm font-medium">Hoje, 16:45</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
-                            <i class="fas fa-arrow-trend-up text-brand-gold mb-4"></i>
-                            <p class="text-gray-500 text-[10px] uppercase font-bold">VGV Negociado</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">R$ 4.2M</h3>
-                        </div>
-                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
-                            <i class="fas fa-user-plus text-blue-400 mb-4"></i>
-                            <p class="text-gray-500 text-[10px] uppercase font-bold">Novos Leads</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">128</h3>
-                        </div>
-                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
-                            <i class="fas fa-house-circle-check text-green-400 mb-4"></i>
-                            <p class="text-gray-500 text-[10px] uppercase font-bold">Unidades Reservadas</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">07</h3>
-                        </div>
-                        <div class="bg-brand-card p-6 rounded-2xl border border-brand-border">
-                            <i class="fas fa-coins text-brand-gold mb-4"></i>
-                            <p class="text-gray-500 text-[10px] uppercase font-bold">Comissões Brutas</p>
-                            <h3 class="text-2xl font-bold text-brand-gold mt-1">R$ 168k</h3>
-                        </div>
-                    </div>
-
-                    <div class="bg-brand-card p-8 rounded-2xl border border-brand-border">
-                        <h4 class="text-sm font-bold uppercase tracking-widest mb-8">Fluxo de Captação mensal</h4>
-                        <canvas id="performanceChart" height="100"></canvas>
-                    </div>
-                </div>
-
-                <div id="page-leads" class="page-content space-y-8">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-3xl font-bold text-white tracking-tight">Gestão de Carteira</h2>
-                        <button onclick="toggleModal()" class="bg-brand-gold text-black px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-105 transition-all">
-                            + Novo Lead
-                        </button>
-                    </div>
-
-                    <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-black/50 text-[10px] uppercase tracking-widest text-gray-500">
-                                <tr>
-                                    <th class="p-6">Nome do Cliente</th>
-                                    <th class="p-6">Interesse</th>
-                                    <th class="p-6">Status</th>
-                                    <th class="p-6">Ação</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="page-simulador" class="page-content">
-                    <div class="max-w-2xl">
-                        <h2 class="text-3xl font-bold text-white tracking-tight mb-8">Inteligência Financeira</h2>
-                        <div class="bg-brand-card p-10 rounded-3xl border border-brand-gold/20 space-y-6 shadow-2xl">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Valor do Ativo</label>
-                                    <input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold text-xl" value="600000">
-                                </div>
-                                <div>
-                                    <label class="text-[10px] text-gray-500 uppercase font-black mb-2 block tracking-widest">Entrada (Cash)</label>
-                                    <input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold text-xl" value="120000">
-                                </div>
-                            </div>
-                            <button onclick="processarCalculo()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-[0.2em] shadow-xl shadow-brand-gold/10 hover:translate-y-[-2px] transition-all">
-                                Gerar Projeção de Parcela
-                            </button>
-                            <div id="resultadoProjecao" class="hidden mt-10 p-8 bg-black rounded-3xl border border-brand-border text-center">
-                                <p class="text-gray-500 text-xs uppercase tracking-widest">Parcela Mensal Estimada (Price)</p>
-                                <h3 id="valorFinal" class="text-5xl font-black text-brand-gold mt-4 tracking-tighter">R$ 0,00</h3>
-                                <p class="text-[10px] text-gray-600 mt-6 italic">*Simulação baseada em taxas médias de 10.5% a.a.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </main>
-    </div>
-
-    <div id="modal-lead" class="fixed inset-0 z-[110] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-brand-card w-full max-w-lg rounded-3xl border border-brand-border p-8">
-            <h3 class="text-xl font-bold mb-6">Cadastrar Potencial Comprador</h3>
-            <div class="space-y-4">
-                <input type="text" id="lead-nome" placeholder="Nome Completo" class="w-full p-4 rounded-xl">
-                <select id="lead-interesse" class="w-full p-4 rounded-xl">
-                    <option value="Lançamento Barra">Lançamento Barra</option>
-                    <option value="Lançamento Recreio">Lançamento Recreio</option>
-                    <option value="Investimento">Investimento</option>
-                </select>
-                <div class="flex gap-4 mt-8">
-                    <button onclick="toggleModal()" class="flex-1 py-4 bg-brand-border rounded-xl font-bold text-xs uppercase">Cancelar</button>
-                    <button onclick="salvarLead()" class="flex-1 py-4 bg-brand-gold text-black rounded-xl font-bold text-xs uppercase">Confirmar Cadastro</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ESTADO DA APLICAÇÃO
-        let leads = JSON.parse(localStorage.getItem('leads')) || [
-            { id: 1, nome: "Marcus Vinicius", interesse: "Riva Barra", status: "Quente" },
-            { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Frio" }
-        ];
-
-        function handleLogin() {
-            document.getElementById('login-overlay').style.display = 'none';
-            document.getElementById('app').classList.remove('hidden');
-            renderLeads();
-            initChart();
-        }
-
-        function navigate(page) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
-            document.getElementById('page-' + page).classList.add('page-active');
-            
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('active', 'text-black');
-                l.classList.add('text-gray-500');
-            });
-            document.getElementById('btn-' + page).classList.add('active');
-            document.getElementById('btn-' + page).classList.remove('text-gray-500');
-        }
-
-        function toggleModal() {
-            const m = document.getElementById('modal-lead');
-            m.classList.toggle('hidden');
-            m.classList.toggle('flex');
-        }
-
-        function salvarLead() {
-            const nome = document.getElementById('lead-nome').value;
-            const interesse = document.getElementById('lead-interesse').value;
-            if(!nome) return alert("Insira o nome");
-
-            const novoLead = { id: Date.now(), nome, interesse, status: "Novo" };
-            leads.push(novoLead);
-            localStorage.setItem('leads', JSON.stringify(leads));
-            renderLeads();
-            toggleModal();
-            document.getElementById('lead-nome').value = "";
-        }
-
-        function deletarLead(id) {
-            leads = leads.filter(l => l.id !== id);
-            localStorage.setItem('leads', JSON.stringify(leads));
-            renderLeads();
-        }
-
-        function renderLeads() {
-            const body = document.getElementById('leads-table-body');
-            body.innerHTML = leads.map(l => `
-                <tr class="hover:bg-white/[0.02] transition-colors">
-                    <td class="p-6 font-semibold text-white">${l.nome}</td>
-                    <td class="p-6 text-gray-500">${l.interesse}</td>
-                    <td class="p-6">
-                        <span class="px-3 py-1 bg-brand-gold/10 text-brand-gold text-[10px] font-black uppercase rounded-full border border-brand-gold/20">${l.status}</span>
-                    </td>
-                    <td class="p-6">
-                        <button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function processarCalculo() {
-            const v = document.getElementById('vImovel').value;
-            const e = document.getElementById('vEntrada').value;
-            const saldo = v - e;
-            const taxaMensal = 0.0085; 
-            const meses = 360;
-            const p = (saldo * taxaMensal) / (1 - Math.pow(1 + taxaMensal, -meses));
-            
-            document.getElementById('resultadoProjecao').classList.remove('hidden');
-            document.getElementById('valorFinal').innerText = p.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                    datasets: [{
-                        label: 'Leads Captados',
-                        data: [65, 82, 70, 95, 110, 128],
-                        borderColor: '#D4AF37',
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointBackgroundColor: '#D4AF37'
-                    }]
-                },
-                options: {
-                    plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { grid: { color: '#232326' }, ticks: { color: '#555' } },
-                        x: { grid: { display: false }, ticks: { color: '#555' } }
-                    }
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+    });
+}
+</script>
