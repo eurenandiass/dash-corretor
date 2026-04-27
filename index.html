@@ -31,109 +31,153 @@
         .page-content { display: none; }
         .page-active { display: block; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-link.active { background: #D4AF37; color: #000; font-weight: 700; }
-        input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; outline: none; }
-        input:focus, select:focus { border-color: #D4AF37 !important; }
-        .status-select { cursor: pointer; transition: all 0.2s; }
-        .status-select:hover { filter: brightness(1.2); }
+        .nav-link.active { background: #D4AF37; color: #000; font-weight: 700; transform: translateX(5px); }
+        .glass { background: rgba(20, 20, 22, 0.7); backdrop-filter: blur(12px); }
+        input, select { background: #0A0A0B !important; border: 1px solid #232326 !important; color: white !important; transition: all 0.3s ease; }
+        input:focus, select:focus { border-color: #D4AF37 !important; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1); outline: none; }
+        .status-select { cursor: pointer; transition: all 0.2s; border: none !important; }
     </style>
 </head>
 <body class="bg-brand-dark text-gray-200 font-sans antialiased overflow-x-hidden">
 
-    <div id="login-overlay" class="fixed inset-0 z-[100] bg-brand-dark flex items-center justify-center px-4 transition-opacity duration-500">
+    <div id="login-overlay" class="fixed inset-0 z-[100] bg-brand-dark flex items-center justify-center px-4 transition-all duration-500">
         <div class="max-w-md w-full bg-brand-card p-10 rounded-[2rem] border border-brand-border shadow-2xl text-center">
             <div class="mb-10">
-                <div class="inline-block p-4 bg-brand-gold/10 rounded-2xl mb-4"><i class="fas fa-shield-halved text-brand-gold text-4xl"></i></div>
-                <h2 class="text-3xl font-black text-white">NEXUS <span class="text-brand-gold">PRO</span></h2>
-                <p class="text-gray-500 text-sm mt-2 uppercase tracking-widest font-medium">Controle de Carteira</p>
+                <div class="inline-block p-4 bg-brand-gold/10 rounded-2xl mb-4">
+                    <i class="fas fa-shield-halved text-brand-gold text-4xl"></i>
+                </div>
+                <h2 class="text-3xl font-black text-white uppercase tracking-tighter">Nexus <span class="text-brand-gold">Pro</span></h2>
+                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest font-bold">Acesso Restrito ao Sistema</p>
             </div>
-            <button onclick="handleLogin(this)" class="w-full py-4 bg-brand-gold text-black font-black rounded-xl uppercase text-xs tracking-widest hover:brightness-110 transition-all">Acessar Sistema</button>
+            <div class="space-y-5">
+                <input type="text" id="user-input" placeholder="Usuário" class="w-full p-4 rounded-xl text-sm">
+                <input type="password" id="pass-input" placeholder="Senha" class="w-full p-4 rounded-xl text-sm">
+                <button onclick="handleLogin(this)" class="w-full py-4 bg-brand-gold text-black font-black rounded-xl uppercase text-xs tracking-widest hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-lock"></i> Autenticar
+                </button>
+            </div>
+            <p class="text-[10px] text-gray-600 mt-6 uppercase tracking-tighter italic font-bold">Dica: admin / admin</p>
         </div>
     </div>
 
     <div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
         
         <aside class="w-full md:w-72 bg-brand-card border-r border-brand-border flex flex-col h-screen sticky top-0 hidden md:flex z-50">
-            <div class="p-8"><h1 class="text-2xl font-black text-white">NEXUS <span class="text-brand-gold text-sm font-light tracking-tighter">SISTEMA</span></h1></div>
-            <nav class="px-4 space-y-2 flex-grow">
-                <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest active" id="btn-resumo"><i class="fas fa-chart-pie"></i> Painel</button>
-                <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest text-gray-500" id="btn-leads"><i class="fas fa-user-group"></i> Leads</button>
-                <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest text-gray-500" id="btn-simulador"><i class="fas fa-calculator"></i> Simulador</button>
+            <div class="p-8 border-b border-brand-border">
+                <h1 class="text-xl font-black text-white">NEXUS <span class="text-brand-gold">PRO</span></h1>
+            </div>
+            
+            <nav class="px-4 py-6 space-y-2 flex-grow">
+                <button onclick="navigate('resumo')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all active" id="btn-resumo">
+                    <i class="fas fa-chart-pie text-lg"></i> Painel Geral
+                </button>
+                <button onclick="navigate('leads')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-leads">
+                    <i class="fas fa-user-group text-lg"></i> Leads & CRM
+                </button>
+                <button onclick="navigate('simulador')" class="nav-link w-full flex items-center gap-4 p-4 rounded-xl text-xs uppercase tracking-widest transition-all text-gray-500 hover:text-white" id="btn-simulador">
+                    <i class="fas fa-calculator text-lg"></i> Simulador Pro
+                </button>
             </nav>
-            <div class="p-6 mt-auto">
-                <div class="bg-black/40 p-4 rounded-2xl border border-brand-border flex items-center gap-3">
+
+            <div class="p-6 mt-auto border-t border-brand-border">
+                <div class="bg-black/40 p-4 rounded-2xl flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-black font-black">R</div>
-                    <div><p class="text-[10px] font-black text-white leading-none uppercase">Renan Dias</p><p class="text-[9px] text-brand-gold mt-1">CRECI 97.201</p></div>
+                    <div>
+                        <p class="text-[10px] font-black text-white uppercase leading-none">Renan Dias</p>
+                        <p class="text-[9px] text-brand-gold mt-1">CRECI 97.201</p>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <main class="flex-grow flex flex-col min-h-screen p-6 md:p-12">
-            
-            <div id="page-resumo" class="page-content page-active space-y-10">
-                <h2 class="text-4xl font-black text-white tracking-tighter">Visão <span class="text-brand-gold">Geral</span></h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
-                        <p class="text-gray-500 text-[10px] uppercase font-black">VGV Bruto</p>
-                        <h3 class="text-2xl font-black text-white mt-1">R$ 4.2M</h3>
-                    </div>
-                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
-                        <p class="text-gray-500 text-[10px] uppercase font-black">Leads Totais</p>
-                        <h3 class="text-2xl font-black text-white mt-1">128</h3>
-                    </div>
-                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
-                        <p class="text-gray-500 text-[10px] uppercase font-black">Em Negociação</p>
-                        <h3 class="text-2xl font-black text-green-400 mt-1">12</h3>
-                    </div>
-                    <div class="bg-brand-card p-6 rounded-3xl border border-brand-border">
-                        <p class="text-gray-500 text-[10px] uppercase font-black">Comissões</p>
-                        <h3 class="text-2xl font-black text-brand-gold mt-1">R$ 168k</h3>
-                    </div>
-                </div>
-                <div class="bg-brand-card p-8 rounded-[2.5rem] border border-brand-border"><canvas id="performanceChart" height="100"></canvas></div>
-            </div>
+        <main class="flex-grow flex flex-col min-h-screen overflow-x-hidden">
+            <div class="p-6 md:p-12 max-w-7xl w-full mx-auto">
+                
+                <div id="page-resumo" class="page-content page-active space-y-10">
+                    <header>
+                        <h2 class="text-4xl font-black text-white tracking-tighter">Painel <span class="text-brand-gold">Executivo</span></h2>
+                        <p class="text-gray-500">Métricas de performance em tempo real.</p>
+                    </header>
 
-            <div id="page-leads" class="page-content space-y-8">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-3xl font-black text-white">Gestão de <span class="text-brand-gold">Carteira</span></h2>
-                    <button onclick="toggleModal()" class="bg-brand-gold text-black px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest">+ Novo Lead</button>
-                </div>
-                <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-black/50 text-[9px] uppercase tracking-widest text-gray-500">
-                            <tr><th class="p-6">Cliente</th><th class="p-6">Interesse</th><th class="p-6">Termômetro (Status)</th><th class="p-6">Ação</th></tr>
-                        </thead>
-                        <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="page-simulador" class="page-content space-y-10">
-                <h2 class="text-3xl font-black text-white">Simulador <span class="text-brand-gold">Analítico</span></h2>
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <div class="lg:col-span-4 bg-brand-card p-8 rounded-3xl border border-brand-border space-y-6">
-                        <div><label class="text-[9px] text-gray-500 font-black uppercase">Valor Imóvel</label><input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold" value="500000"></div>
-                        <div><label class="text-[9px] text-gray-500 font-black uppercase">Entrada</label><input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold" value="100000"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="text-[9px] text-gray-500 font-black uppercase">Prazo (Meses)</label><input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360"></div>
-                            <div><label class="text-[9px] text-gray-500 font-black uppercase">Taxa (% a.a.)</label><input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border hover:border-brand-gold/20 transition-all">
+                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">VGV Negociado</p>
+                            <h3 class="text-3xl font-black text-white mt-1">R$ 4.2M</h3>
                         </div>
-                        <div><label class="text-[9px] text-gray-500 font-black uppercase">Sistema</label>
-                            <select id="vSistema" class="w-full p-4 rounded-xl font-bold"><option value="SAC">SAC (Decrescente)</option><option value="PRICE">PRICE (Fixa)</option></select>
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
+                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Leads Ativos</p>
+                            <h3 class="text-3xl font-black text-white mt-1">128</h3>
                         </div>
-                        <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase text-[10px]">Gerar Análise Técnica</button>
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
+                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Reservas</p>
+                            <h3 class="text-3xl font-black text-green-400 mt-1">07</h3>
+                        </div>
+                        <div class="bg-brand-card p-7 rounded-[2rem] border border-brand-border">
+                            <p class="text-gray-500 text-[10px] uppercase font-black tracking-widest">Comissões</p>
+                            <h3 class="text-3xl font-black text-brand-gold mt-1">R$ 168k</h3>
+                        </div>
                     </div>
-                    <div id="res-calculo" class="lg:col-span-8 space-y-6 hidden">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[9px] uppercase font-black">1ª Parcela</p><h3 id="res-primeira" class="text-3xl font-black text-white">R$ 0,00</h3></div>
-                            <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[9px] uppercase font-black">Última Parcela</p><h3 id="res-ultima" class="text-3xl font-black text-gray-500">R$ 0,00</h3></div>
-                        </div>
-                        <div class="bg-brand-card p-8 rounded-3xl border border-brand-border flex flex-col md:flex-row items-center gap-10">
-                            <div class="w-full md:w-1/2"><canvas id="loanChart"></canvas></div>
-                            <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
-                                <div><p class="text-gray-500 text-[10px] font-black uppercase">Total de Juros</p><h4 id="res-juros-total" class="text-xl font-bold text-red-500">R$ 0,00</h4></div>
-                                <div class="h-px bg-brand-border"></div>
-                                <div><p class="text-brand-gold text-[10px] font-black uppercase">Custo Efetivo (CET)</p><h4 id="res-cet" class="text-3xl font-black text-white">R$ 0,00</h4></div>
+
+                    <div class="bg-brand-card p-8 rounded-[2.5rem] border border-brand-border">
+                        <h4 class="text-xs font-black uppercase tracking-widest text-gray-500 mb-8">Performance Mensal</h4>
+                        <canvas id="performanceChart" height="100"></canvas>
+                    </div>
+                </div>
+
+                <div id="page-leads" class="page-content space-y-8">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-3xl font-black text-white tracking-tight">Gestão de <span class="text-brand-gold">Oportunidades</span></h2>
+                        <button onclick="toggleModal()" class="bg-brand-gold text-black px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-brand-gold/20">
+                            + Nova Oportunidade
+                        </button>
+                    </div>
+
+                    <div class="bg-brand-card rounded-[2rem] border border-brand-border overflow-hidden shadow-2xl">
+                        <table class="w-full text-left">
+                            <thead class="bg-black/50 text-[9px] uppercase tracking-widest text-gray-500">
+                                <tr>
+                                    <th class="p-7">Investidor</th>
+                                    <th class="p-7">Interesse</th>
+                                    <th class="p-7">Status (Termômetro)</th>
+                                    <th class="p-7">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body" class="divide-y divide-brand-border text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="page-simulador" class="page-content">
+                    <div class="max-w-5xl mx-auto space-y-10">
+                        <h2 class="text-3xl font-black text-white tracking-tight">Inteligência <span class="text-brand-gold">Financeira</span></h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 text-black">
+                            <div class="lg:col-span-4 bg-brand-card p-8 rounded-[2rem] border border-brand-border space-y-6">
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Valor Imóvel</label><input type="number" id="vImovel" class="w-full p-4 rounded-xl font-bold" value="500000"></div>
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Entrada</label><input type="number" id="vEntrada" class="w-full p-4 rounded-xl font-bold" value="100000"></div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Prazo (Meses)</label><input type="number" id="vPrazo" class="w-full p-4 rounded-xl" value="360"></div>
+                                    <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block">Juros (% a.a.)</label><input type="number" id="vTaxa" class="w-full p-4 rounded-xl" value="10.5"></div>
+                                </div>
+                                <div><label class="text-[9px] text-gray-500 uppercase font-black mb-2 block text-brand-gold">Sistema</label>
+                                    <select id="vSistema" class="w-full p-4 rounded-xl font-bold"><option value="SAC">SAC (Decrescente)</option><option value="PRICE">PRICE (Fixa)</option></select>
+                                </div>
+                                <button onclick="processarCalculoPro()" class="w-full py-5 bg-brand-gold text-black font-black rounded-2xl uppercase tracking-widest text-xs">Analisar Viabilidade</button>
+                            </div>
+
+                            <div id="res-calculo" class="lg:col-span-8 space-y-6 hidden animate-fade-in">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[10px] uppercase font-bold">1ª Parcela</p><h3 id="res-primeira" class="text-3xl font-black text-white">R$ 0,00</h3></div>
+                                    <div class="bg-brand-card p-6 rounded-2xl border border-brand-border"><p class="text-gray-500 text-[10px] uppercase font-bold">Última Parcela</p><h3 id="res-ultima" class="text-3xl font-black text-gray-500">R$ 0,00</h3></div>
+                                </div>
+                                <div class="bg-brand-card p-8 rounded-3xl border border-brand-border flex flex-col md:flex-row items-center gap-10">
+                                    <div class="w-full md:w-1/2"><canvas id="loanChart"></canvas></div>
+                                    <div class="w-full md:w-1/2 space-y-6">
+                                        <div><p class="text-gray-500 text-[10px] font-black uppercase">Juros Totais</p><h4 id="res-juros-total" class="text-2xl font-bold text-red-500 tracking-tighter">R$ 0,00</h4></div>
+                                        <div class="h-px bg-brand-border"></div>
+                                        <div><p class="text-brand-gold text-[10px] font-black uppercase tracking-widest">Custo Total (CET)</p><h4 id="res-cet" class="text-3xl font-black text-white tracking-tighter">R$ 0,00</h4></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,56 +185,70 @@
             </div>
         </main>
     </div>
-
     <div id="modal-lead" class="fixed inset-0 z-[110] bg-black/95 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-brand-card w-full max-w-lg rounded-[2.5rem] border border-brand-border p-10">
-            <h3 class="text-2xl font-black mb-8 text-white">Novo <span class="text-brand-gold">Lead</span></h3>
+        <div class="bg-brand-card w-full max-w-lg rounded-[2.5rem] border border-brand-border p-10 shadow-2xl">
+            <h3 class="text-2xl font-black mb-8 text-white tracking-tight">Novo <span class="text-brand-gold">Lead</span></h3>
             <div class="space-y-4">
-                <input type="text" id="lead-nome" placeholder="Nome do Cliente" class="w-full p-4 rounded-xl">
-                <input type="text" id="lead-interesse" placeholder="Empreendimento de Interesse" class="w-full p-4 rounded-xl">
-                <select id="lead-status-init" class="w-full p-4 rounded-xl font-bold">
+                <input type="text" id="lead-nome" placeholder="Nome do Cliente" class="w-full p-5 rounded-2xl border-none outline-none text-white bg-black">
+                <input type="text" id="lead-interesse" placeholder="Empreendimento" class="w-full p-5 rounded-2xl border-none outline-none text-white bg-black">
+                <select id="lead-status-init" class="w-full p-5 rounded-2xl font-bold text-white bg-black">
                     <option value="Novo">Novo Lead</option>
-                    <option value="Quente">Quente (Fase de Proposta)</option>
-                    <option value="Frio">Frio (Apenas curiosidade)</option>
+                    <option value="Quente">Quente (Negociação)</option>
+                    <option value="Frio">Frio (Curiosidade)</option>
                 </select>
-                <div class="flex gap-4 pt-6">
-                    <button onclick="toggleModal()" class="flex-1 py-4 bg-brand-border rounded-xl font-black text-[10px] uppercase">Cancelar</button>
-                    <button onclick="salvarLead()" class="flex-1 py-4 bg-brand-gold text-black rounded-xl font-black text-[10px] uppercase">Cadastrar</button>
+                <div class="flex gap-4 pt-8">
+                    <button onclick="toggleModal()" class="flex-1 py-5 bg-brand-border rounded-2xl font-black text-[10px] uppercase">Cancelar</button>
+                    <button onclick="salvarLead()" class="flex-1 py-5 bg-brand-gold text-black rounded-2xl font-black text-[10px] uppercase">Registrar</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // CONFIG E ESTADO
         let leads = JSON.parse(localStorage.getItem('leads')) || [
             { id: 1, nome: "Marcus Vinicius", interesse: "Riva Barra", status: "Quente" },
             { id: 2, nome: "Ana Paula Silva", interesse: "Riva Recreio", status: "Novo" }
         ];
         let loanChart = null;
 
+        // LOGIN
         function handleLogin(btn) {
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Autenticando...';
-            setTimeout(() => {
-                document.getElementById('login-overlay').style.display = 'none';
-                document.getElementById('app').classList.remove('hidden');
-                renderLeads(); initChart();
-            }, 800);
+            const user = document.getElementById('user-input').value;
+            const pass = document.getElementById('pass-input').value;
+            
+            if (user === "admin" && pass === "admin") {
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Autenticando...';
+                setTimeout(() => {
+                    document.getElementById('login-overlay').classList.add('opacity-0', 'invisible');
+                    setTimeout(() => {
+                        document.getElementById('app').classList.remove('hidden');
+                        renderLeads(); initChart();
+                        Swal.fire({ title: 'Bem-vindo, Renan!', icon: 'success', background: '#141416', color: '#fff', confirmButtonColor: '#D4AF37' });
+                    }, 500);
+                }, 1200);
+            } else {
+                Swal.fire({ title: 'Erro de Acesso', text: 'Credenciais inválidas!', icon: 'error', background: '#141416', color: '#fff' });
+            }
         }
 
-        function navigate(page) {
+        // NAVEGAÇÃO SPA
+        function navigate(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('page-active'));
-            document.getElementById('page-' + page).classList.add('page-active');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.getElementById('btn-' + page).classList.add('active');
+            document.getElementById('page-' + pageId).classList.add('page-active');
+            document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('active'); l.classList.add('text-gray-500'); });
+            document.getElementById('btn-' + pageId).classList.add('active');
+            document.getElementById('btn-' + pageId).classList.remove('text-gray-500');
         }
 
+        // CRM
         function toggleModal() { document.getElementById('modal-lead').classList.toggle('hidden'); document.getElementById('modal-lead').classList.toggle('flex'); }
 
         function salvarLead() {
             const nome = document.getElementById('lead-nome').value;
             const interesse = document.getElementById('lead-interesse').value;
             const status = document.getElementById('lead-status-init').value;
-            if(!nome) return Swal.fire({ icon: 'error', title: 'Erro', text: 'Nome obrigatório!', background: '#141416', color: '#fff' });
+            if(!nome) return;
             leads.push({ id: Date.now(), nome, interesse, status });
             localStorage.setItem('leads', JSON.stringify(leads));
             renderLeads(); toggleModal();
@@ -199,8 +257,8 @@
         function alterarStatus(id, novoStatus) {
             leads = leads.map(l => l.id === id ? { ...l, status: novoStatus } : l);
             localStorage.setItem('leads', JSON.stringify(leads));
-            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Status atualizado', showConfirmButton: false, timer: 1500, background: '#141416', color: '#D4AF37' });
             renderLeads();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Status Atualizado', showConfirmButton: false, timer: 1500, background: '#141416', color: '#D4AF37' });
         }
 
         function deletarLead(id) {
@@ -214,21 +272,22 @@
             body.innerHTML = leads.map(l => {
                 const color = l.status === 'Quente' ? 'text-red-500' : (l.status === 'Frio' ? 'text-blue-400' : 'text-brand-gold');
                 return `
-                <tr class="hover:bg-white/[0.02]">
-                    <td class="p-6 font-bold text-white">${l.nome}</td>
-                    <td class="p-6 text-gray-500 font-medium">${l.interesse}</td>
-                    <td class="p-6">
-                        <select onchange="alterarStatus(${l.id}, this.value)" class="status-select bg-brand-gold/10 ${color} text-[9px] font-black uppercase rounded-full border border-brand-gold/10 px-3 py-1">
+                <tr class="hover:bg-white/[0.02] transition-all">
+                    <td class="p-7 font-bold text-white">${l.nome}</td>
+                    <td class="p-7 text-gray-500 font-medium">${l.interesse}</td>
+                    <td class="p-7">
+                        <select onchange="alterarStatus(${l.id}, this.value)" class="status-select bg-brand-gold/10 ${color} text-[10px] font-black uppercase rounded-full px-4 py-1.5 border border-brand-gold/10">
                             <option value="Novo" ${l.status === 'Novo' ? 'selected' : ''}>Novo</option>
                             <option value="Quente" ${l.status === 'Quente' ? 'selected' : ''}>Quente</option>
                             <option value="Frio" ${l.status === 'Frio' ? 'selected' : ''}>Frio</option>
                         </select>
                     </td>
-                    <td class="p-6"><button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash-can"></i></button></td>
+                    <td class="p-7"><button onclick="deletarLead(${l.id})" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash-can"></i></button></td>
                 </tr>`;
             }).join('');
         }
 
+        // SIMULADOR
         function processarCalculoPro() {
             const vImovel = parseFloat(document.getElementById('vImovel').value);
             const vEntrada = parseFloat(document.getElementById('vEntrada').value);
@@ -239,8 +298,16 @@
             const iMensal = Math.pow(1 + iAnual, 1/12) - 1;
             let primeira, ultima, totalPago, juros;
 
-            if (sistema === "PRICE") { primeira = (saldo * iMensal) / (1 - Math.pow(1 + iMensal, -n)); ultima = primeira; totalPago = primeira * n; juros = totalPago - saldo;
-            } else { const amort = saldo / n; primeira = amort + (saldo * iMensal); ultima = amort + (amort * iMensal); juros = ((saldo * iMensal) + (amort * iMensal)) * n / 2; totalPago = saldo + juros; }
+            if (sistema === "PRICE") {
+                primeira = (saldo * iMensal) / (1 - Math.pow(1 + iMensal, -n));
+                ultima = primeira; totalPago = primeira * n; juros = totalPago - saldo;
+            } else {
+                const amort = saldo / n;
+                primeira = amort + (saldo * iMensal);
+                ultima = amort + (amort * iMensal);
+                juros = ((saldo * iMensal) + (amort * iMensal)) * n / 2;
+                totalPago = saldo + juros;
+            }
 
             document.getElementById('res-calculo').classList.remove('hidden');
             document.getElementById('res-primeira').innerText = formatBRL(primeira);
@@ -254,10 +321,8 @@
 
         function updateLoanChart(p, j) {
             const ctx = document.getElementById('loanChart').getContext('2d');
-            const total = p + j;
-            const percP = ((p / total) * 100).toFixed(1);
-            const percJ = ((j / total) * 100).toFixed(1);
-
+            const percP = ((p / (p+j)) * 100).toFixed(1);
+            const percJ = ((j / (p+j)) * 100).toFixed(1);
             if(loanChart) loanChart.destroy();
             loanChart = new Chart(ctx, {
                 type: 'doughnut',
@@ -265,7 +330,7 @@
                     labels: [`Imóvel (${percP}%)`, `Juros (${percJ}%)`],
                     datasets: [{ data: [p, j], backgroundColor: ['#D4AF37', '#232326'], borderWidth: 0 }]
                 },
-                options: { cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { size: 10, weight: 'bold' } } } } }
+                options: { cutout: '80%', plugins: { legend: { position: 'bottom', labels: { color: '#888', font: { weight: 'bold' } } } } }
             });
         }
 
